@@ -1,24 +1,22 @@
 var tokens =
 {
   // ---------- while
-  "while ": 'while',
+  "while "      : 'while',
   // ---------- if
-  "if ": 'if',
-  "if(": 'if',
-  " then": 'then',
-  "\nthen ": 'then',
-  "\nthen\n": 'then',
-  "then\n": 'then',
-  "else ": 'else',
-  "else\n": 'else',
-  "\nelse": 'else',
-  "\nelse\n": 'else',
+  "if "         : 'if',
+  "if("         : 'if',
+  " then"       : 'then',
+  "\nthen "     : 'then',
+  "\nthen\n"    : 'then',
+  "then\n"      : 'then',
+  "else "       : 'else',
+  "else\n"      : 'else',
+  "\nelse"      : 'else',
+  "\nelse\n"    : 'else',
 
   // ---------- read write
-  "write ": 'write',
-  "read ": 'read',
-
-
+  "write "      : 'write',
+  "read "       : 'read',
 
   // ---------- module
   "for"         : 'for',
@@ -33,7 +31,7 @@ var tokens =
   "input:"      : 'input',
   "output:"     : 'output',
   "id"          : 'id',
-  "return "     : 'return ',
+  "return "     : 'return',
   "return("     : 'return',
 };
 
@@ -153,45 +151,27 @@ Array.prototype.forEach.call( inputs, function( input )
 function detectKeywords()
 {
   var newCode        = $('#newCode').val();
-  var findedKeywords = [];
-console.log(tokens);
+  var findedKeywords = {};
   $.each(tokens, function( token, value )
   {
-    // console.log(value);
-    // remove extra char at last of string
-    // if(value.substr(-1) === ':' || value.substr(-1) === '(' || value.substr(-1) === ' ' || value.substr(-2) === '\n'
-    //   || value.substr(2) === '\n')
-    // {
-    //   value = value.substr(0 , value.length -1);
-    // }
-
-    // var count = (newCode.match(/value/g) || []).length;
-    var count = newCode.split(value).length - 1;
+    var count    = newCode.split(token).length - 1;
+    var oldValue = 0;
 
     // if we can find keyword, add to keywords location
     if(count)
     {
       // save result in new array
-      findedKeywords[value] = count;
+      if(findedKeywords[value])
+      {
+        var oldValue = parseInt(findedKeywords[value]);
+      }
+      findedKeywords[value] = oldValue + count;
     }
-    // else
-    // {
-    //     // $('#keywords [data-keyword="'+value+'"]').html('');
-    // }
-
   });
 
-    console.log(findedKeywords);
-
-  $.each(findedKeywords, function( i, val ) {
-  });
-
-
+  $('#keywords').html('');
   $.each(findedKeywords, function( key, count )
   {
-    console.log("1233333");
-      $('#keywords').html('');
-      console.log(key);
       console.log(key + ': '  + count);
       // if exist update count
       if($('#keywords [data-keyword="'+key+'"]').html())
