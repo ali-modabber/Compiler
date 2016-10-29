@@ -5,6 +5,7 @@ var tokens =
   // ---------- if
   "if "         : 'if',
   "if("         : 'if',
+  "if\n"        : 'if',
   " then "      : 'then',
   "\nthen "     : 'then',
   "\nthen\n"    : 'then',
@@ -38,14 +39,19 @@ var tokens =
   " input: "    : 'input',
 
   "output:"     : 'output',
-  // "id"          : 'id',
+  "output: "    : 'output',
+  " output: "   : 'output',
+
   " return "    : 'return',
   "\nreturn "   : 'return',
   " return("    : 'return',
   "\nreturn("   : 'return',
 
-  "%%"          : 'comment',
-  "%%%"         : 'comment',
+
+  "!!..comment..!!"  : 'comment',
+  "line_comment"     : 'comment',
+  // /^\%{3}(.*\n)+\%{3}$/ : 'comment',
+  // /^\%{2}(.*[^\%])$/    : 'comment',
 };
 
 
@@ -164,10 +170,20 @@ Array.prototype.forEach.call( inputs, function( input )
 function detectKeywords()
 {
   var newCode        = $('#newCode').val();
+  var filteredCode    = newCode;
   var findedKeywords = {};
+  // change code to lower case
+  filteredCode = newCode.toLowerCase();
+
+  // remove multi line comments
+  var filteredCode = filteredCode.replace(/%%%(?:(?!%%%).)*%%%/gim, '!!..comment..!!');
+  // remove one line comments
+  var filteredCode = filteredCode.replace(/%%.*/gi, 'line_comment');
+
+  // foreach token, find this token is used
   $.each(tokens, function( token, value )
   {
-    var count    = newCode.split(token).length - 1;
+    var count    = filteredCode.split(token).length - 1;
     var oldValue = 0;
 
     // if we can find keyword, add to keywords location
@@ -205,10 +221,6 @@ function detectKeywords()
   {
     if (key == 'comment')
       {
-        // console.log(key);
-        // console.log('comment');
-
-        // console.log(key);
         while(key != 'comment')
         {
           console.log('comment222');
@@ -218,12 +230,14 @@ function detectKeywords()
 
 }
 
+
+
+
 $(document).ready(function()
 {
     $('#newCode').keyup(function()
     {
        detectKeywords();
     });
-
 
 });
