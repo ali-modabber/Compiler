@@ -41,8 +41,6 @@ input[type="file"]{width:.1px;height:.1px;opacity:0;overflow:hidden;position:abs
 label.successful{background-image:url(../images/checked.svg);}
 .custom-file-upload:hover{background-color:#878787}
 
-
-
 #keywords span{float: right;}
 #keywords code{display: block;}
 

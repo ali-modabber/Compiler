@@ -227,17 +227,3 @@ $(document).ready(function()
 
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
