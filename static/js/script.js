@@ -8,13 +8,18 @@ var TOKENS    =
   "if("             : 'if',
   "if\n"            : 'if',
   " then "          : 'then',
+  "\tthen "         : 'then',
   "\nthen "         : 'then',
+  "\tthen "         : 'then',
   "\nthen\n"        : 'then',
+  "\tthen\n"        : 'then',
   "then\n"          : 'then',
   "else "           : 'else',
   "else\n"          : 'else',
   "\nelse"          : 'else',
+  "\telse"          : 'else',
   "\nelse\n"        : 'else',
+  "\telse\n"        : 'else',
 
   // ---------- read write
   "write "          : 'write',
@@ -24,10 +29,14 @@ var TOKENS    =
   "for"             : 'for',
   " begin "         : 'begin',
   "\nbegin"         : 'begin',
+  "\tbegin"         : 'begin',
   "\nbegin\n"       : 'begin',
+  "\tbegin\n"       : 'begin',
   " end "           : 'end',
   "\nend"           : 'end',
+  "\tend"           : 'end',
   "\nend\n"         : 'end',
+  "\tend\n"         : 'end',
   ":bool"           : 'bool',
   ":real"           : 'real',
   ":string"         : 'string',
@@ -45,8 +54,10 @@ var TOKENS    =
 
   " return "        : 'return',
   "\nreturn "       : 'return',
+  "\treturn "       : 'return',
   " return("        : 'return',
   "\nreturn("       : 'return',
+  "\treturn("       : 'return',
 
   // ---------- comments
   "!..comment..!"   : 'comment',
@@ -258,22 +269,26 @@ function filter_while(_str)
 function checkSyntax(_input)
 {
   var hasError = false;
-  var mycode = _input;
+  var myCode   = _input;
 
   // foreach token, find this token is used
   $.each(TOKENS, function( token, value )
   {
-    if(mycode)
+    if(myCode)
     {
-      var count    = mycode.split(token).length - 1;
+      var count    = myCode.split(token).length - 1;
 
       // token = $.trim(token);
-      mycode = mycode.replace(token, '');
+      myCode = strReplaceAll(myCode, token, '');
     }
   });
 
+
+  // find code number above this line
+  myCode = $.trim(myCode);
+
   // if something remain then we have error on code
-  if(mycode.length)
+  if(myCode.length)
   {
     hasError = true;
   }
@@ -288,6 +303,14 @@ function checkSyntax(_input)
     $('#editor').removeClass('fault');
   }
 
+}
+
+function strReplaceAll(string, Find, Replace) {
+    try {
+        return string.replace( new RegExp(Find, "gi"), Replace );
+    } catch(ex) {
+        return string;
+    }
 }
 
 

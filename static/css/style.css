@@ -36,7 +36,7 @@ pre{padding:0;margin:0;overflow: initial;font-size: 1.8em;background-color: tran
 pre code{ margin:0; }
 
 input[type="file"]{width:.1px;height:.1px;opacity:0;overflow:hidden;position:absolute;z-index:-1}
-.custom-file-upload{font-size:1.2em;color:#fff;border:none;background-color:#737373;cursor:pointer;padding:10px 20px;margin-top:40px;background-image:url(../images/curriculum.svg);background-position:6% 10px;background-size:20px;background-repeat:no-repeat;outline:none;display:block; position:absolute; bottom:1em; right:2%;}
+.custom-file-upload{font-size:1.2em;color:#fff;border:none;background-color:#737373;cursor:pointer;padding:11px 39px;margin-top:40px;background-image:url(../images/curriculum.svg);background-position:6% 10px;background-size:20px;background-repeat:no-repeat;outline:none;display:block; position:absolute; bottom:0; right:0;}
 .custom-file-upload strong{margin-left: 1.5em;}
 label.successful{background-image:url(../images/checked.svg);}
 .custom-file-upload:hover{background-color:#878787}
