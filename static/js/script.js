@@ -63,6 +63,9 @@ var TOKENS    =
   "!..comment..!"   : 'comment',
   "!.comment.!"     : 'comment',
 
+  // ---------- comments
+  "variable"        : 'variable',
+
 };
 
 
@@ -250,8 +253,18 @@ function filter_comments(_str)
 function detect_variables(_str)
 {
   // work with VARIABLES
-  var remove_command = _str.match(/^(([^:])+:|([^=]+)=)(real|bool|string)$/)
-
+  // console.log(_str);
+  var remove_variables = _str.match(/^(([^:])+:|([^=]+)=)(real|bool|string)$/)
+  if (remove_variables)
+  {
+    myVariables = remove_variables[0];
+    if (_str == myVariables)
+    {
+      // console.log('variable');
+      myVariables = myVariables.replace(/^(([^:])+:|([^=]+)=)(real|bool|string)$/, 'variable');
+      console.log(myVariables);
+    }
+  }
 }
 
 function filter_while(_str)
@@ -276,10 +289,10 @@ function checkSyntax(_input)
   {
     if(myCode)
     {
-      var count    = myCode.split(token).length - 1;
+      var count   = myCode.split(token).length - 1;
 
       // token = $.trim(token);
-      myCode = strReplaceAll(myCode, token, '');
+      myCode      = strReplaceAll(myCode, token, '');
     }
   });
 
