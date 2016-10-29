@@ -25,6 +25,7 @@ body{direction:ltr; color: #fff; height:100%; max-height:100%; min-height:734px;
 #editor, #compiledCode{color:#eee;height: 50%; min-height: 50%; max-height:50% ; position: relative; background-color:#2b2b2b; border-right: 1px solid #777;}
 #editor{border-bottom:1px solid #777; }
 #keywords{border-left:1px solid #777; min-height:88%;padding:1em; }
+#keywords code{ font-size:1.5em; }
 
 .result{color:#eee;padding:2em; height: 100%; min-height: 100%; max-height:100% ; position: relative; background-color:#2b2b2b;}
 #newCode{border:none ;color:#eee;padding:2em;  height: 100%; min-height: 100%; max-height:100% ; background-color:#2b2b2b; width:100%; min-width:100%; max-width:100%; resize: none;}

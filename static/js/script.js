@@ -5,7 +5,7 @@ var tokens =
   // ---------- if
   "if "         : 'if',
   "if("         : 'if',
-  " then"       : 'then',
+  " then "      : 'then',
   "\nthen "     : 'then',
   "\nthen\n"    : 'then',
   "then\n"      : 'then',
@@ -20,19 +20,32 @@ var tokens =
 
   // ---------- module
   "for"         : 'for',
-  "begin"       : 'begin',
-  "end"         : 'end',
+  " begin "     : 'begin',
+  "\nbegin"     : 'begin',
+  "\nbegin\n"   : 'begin',
+  " end "       : 'end',
+  "\nend"       : 'end',
+  "\nend\n"     : 'end',
   ":bool"       : 'bool',
   ":real"       : 'real',
   ":string"     : 'string',
   "true"        : 'true',
   "false"       : 'false',
   "module "     : 'module ',
+
   "input:"      : 'input',
+  "input: "     : 'input',
+  " input: "    : 'input',
+
   "output:"     : 'output',
-  "id"          : 'id',
-  "return "     : 'return',
-  "return("     : 'return',
+  // "id"          : 'id',
+  " return "    : 'return',
+  "\nreturn "   : 'return',
+  " return("    : 'return',
+  "\nreturn("   : 'return',
+
+  "%%"          : 'comment',
+  "%%%"         : 'comment',
 };
 
 
@@ -172,7 +185,8 @@ function detectKeywords()
   $('#keywords').html('');
   $.each(findedKeywords, function( key, count )
   {
-      console.log(key + ': '  + count);
+      // console.log(key + ': '  + count);
+
       // if exist update count
       if($('#keywords [data-keyword="'+key+'"]').html())
       {
@@ -186,8 +200,23 @@ function detectKeywords()
 
       }
   });
-}
 
+  $.each(findedKeywords, function( key, count )
+  {
+    if (key == 'comment')
+      {
+        // console.log(key);
+        // console.log('comment');
+
+        // console.log(key);
+        while(key != 'comment')
+        {
+          console.log('comment222');
+        }
+      };
+  });
+
+}
 
 $(document).ready(function()
 {
