@@ -15,7 +15,6 @@
           <textarea id="newCode" name="user_code" placeholder="Write your code here..."></textarea>
           <input type="file" name="file" id="file" accept=".fapla" />
           <label class="custom-file-upload" for="file"><strong>upload File</strong></label>
-          <input type="submit" class="run_btn" value="Run" />
         </div>
         <div class="span2" id='keywords'><?php echo print_token(); ?></div>
       </div>

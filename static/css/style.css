@@ -44,5 +44,20 @@ label.successful{background-image:url(../images/checked.svg);}
 #keywords span{float: right;}
 #keywords code{display: block;}
 
+#editor::before{
+  content: '✔';
+  position: absolute;
+  color: #fff;
+  right: 20%;
+  bottom: 0;
+  line-height:1;
+  font-size: 10em;
+  transition:0.3s;
+}
 
+#editor.fault::before{
+  content: "✖";
+  color: #999;
+  opacity: .6;
+}
 

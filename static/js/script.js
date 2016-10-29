@@ -1,57 +1,57 @@
-var tokens =
+var VARIABLES = {};
+var TOKENS    =
 {
   // ---------- while
-  "while "      : 'while',
+  "while "          : 'while',
   // ---------- if
-  "if "         : 'if',
-  "if("         : 'if',
-  "if\n"        : 'if',
-  " then "      : 'then',
-  "\nthen "     : 'then',
-  "\nthen\n"    : 'then',
-  "then\n"      : 'then',
-  "else "       : 'else',
-  "else\n"      : 'else',
-  "\nelse"      : 'else',
-  "\nelse\n"    : 'else',
+  "if "             : 'if',
+  "if("             : 'if',
+  "if\n"            : 'if',
+  " then "          : 'then',
+  "\nthen "         : 'then',
+  "\nthen\n"        : 'then',
+  "then\n"          : 'then',
+  "else "           : 'else',
+  "else\n"          : 'else',
+  "\nelse"          : 'else',
+  "\nelse\n"        : 'else',
 
   // ---------- read write
-  "write "      : 'write',
-  "read "       : 'read',
+  "write "          : 'write',
+  "read "           : 'read',
 
   // ---------- module
-  "for"         : 'for',
-  " begin "     : 'begin',
-  "\nbegin"     : 'begin',
-  "\nbegin\n"   : 'begin',
-  " end "       : 'end',
-  "\nend"       : 'end',
-  "\nend\n"     : 'end',
-  ":bool"       : 'bool',
-  ":real"       : 'real',
-  ":string"     : 'string',
-  "true"        : 'true',
-  "false"       : 'false',
-  "module "     : 'module ',
+  "for"             : 'for',
+  " begin "         : 'begin',
+  "\nbegin"         : 'begin',
+  "\nbegin\n"       : 'begin',
+  " end "           : 'end',
+  "\nend"           : 'end',
+  "\nend\n"         : 'end',
+  ":bool"           : 'bool',
+  ":real"           : 'real',
+  ":string"         : 'string',
+  "true"            : 'true',
+  "false"           : 'false',
+  "module "         : 'module ',
 
-  "input:"      : 'input',
-  "input: "     : 'input',
-  " input: "    : 'input',
+  "input:"          : 'input',
+  "input: "         : 'input',
+  " input: "        : 'input',
 
-  "output:"     : 'output',
-  "output: "    : 'output',
-  " output: "   : 'output',
+  "output:"         : 'output',
+  "output: "        : 'output',
+  " output: "       : 'output',
 
-  " return "    : 'return',
-  "\nreturn "   : 'return',
-  " return("    : 'return',
-  "\nreturn("   : 'return',
+  " return "        : 'return',
+  "\nreturn "       : 'return',
+  " return("        : 'return',
+  "\nreturn("       : 'return',
 
+  // ---------- comments
+  "!..comment..!"   : 'comment',
+  "!.comment.!"     : 'comment',
 
-  "!!..comment..!!"  : 'comment',
-  "line_comment"     : 'comment',
-  // /^\%{3}(.*\n)+\%{3}$/ : 'comment',
-  // /^\%{2}(.*[^\%])$/    : 'comment',
 };
 
 
@@ -166,24 +166,30 @@ Array.prototype.forEach.call( inputs, function( input )
 } )( jQuery );
 
 
-
+/**
+ * [detectKeywords description]
+ * @return {[type]} [description]
+ */
 function detectKeywords()
 {
-  var newCode        = $('#newCode').val();
-  var filteredCode    = newCode;
+  var newCode  = $('#newCode').val();
+  var myCode   = newCode;
   var findedKeywords = {};
   // change code to lower case
-  filteredCode = newCode.toLowerCase();
+  myCode = myCode.toLowerCase();
 
-  // remove multi line comments
-  var filteredCode = filteredCode.replace(/%%%(?:(?!%%%).)*%%%/gim, '!!..comment..!!');
-  // remove one line comments
-  var filteredCode = filteredCode.replace(/%%.*/gi, 'line_comment');
+  // run filter of comments
+  myCode = filter_comments(myCode);
+  // detect variables
+  detect_variables(myCode);
+  // run filter of while
+  myCode = filter_while(myCode);
+
 
   // foreach token, find this token is used
-  $.each(tokens, function( token, value )
+  $.each(TOKENS, function( token, value )
   {
-    var count    = filteredCode.split(token).length - 1;
+    var count    = myCode.split(token).length - 1;
     var oldValue = 0;
 
     // if we can find keyword, add to keywords location
@@ -217,19 +223,72 @@ function detectKeywords()
       }
   });
 
-  $.each(findedKeywords, function( key, count )
-  {
-    if (key == 'comment')
-      {
-        while(key != 'comment')
-        {
-          console.log('comment222');
-        }
-      };
-  });
+  checkSyntax(myCode);
+}
+
+
+function filter_comments(_str)
+{
+  // remove multi line comments
+  _str = _str.replace(/%%%(?:(?!%%%)[\s\S\n])*%%%/gim, '!..comment..!');
+  // remove one line comments
+  _str = _str.replace(/%%.*/gi, '!.comment.!');
+  return _str;
+}
+
+function detect_variables(_str)
+{
+  // work with VARIABLES
+  var remove_command = _str.match(/^(([^:])+:|([^=]+)=)(real|bool|string)$/)
 
 }
 
+function filter_while(_str)
+{
+  return _str;
+}
+
+
+
+/**
+ * [checkSyntax description]
+ * @param  {[type]} _input [description]
+ * @return {[type]}        [description]
+ */
+function checkSyntax(_input)
+{
+  var hasError = false;
+  var mycode = _input;
+
+  // foreach token, find this token is used
+  $.each(TOKENS, function( token, value )
+  {
+    if(mycode)
+    {
+      var count    = mycode.split(token).length - 1;
+
+      // token = $.trim(token);
+      mycode = mycode.replace(token, '');
+    }
+  });
+
+  // if something remain then we have error on code
+  if(mycode.length)
+  {
+    hasError = true;
+  }
+
+  // change status of codes
+  if(hasError)
+  {
+    $('#editor').addClass('fault');
+  }
+  else
+  {
+    $('#editor').removeClass('fault');
+  }
+
+}
 
 
 
