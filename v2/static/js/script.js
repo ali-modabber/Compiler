@@ -53,3 +53,4 @@ function setValueInEditor(_txt)
     }
   } );
 } )( jQuery );
+
