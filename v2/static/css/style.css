@@ -1,0 +1,98 @@
+
+body{
+	background-color: #eee;
+	background-color: #2b2b2b;
+}
+
+pre{
+	margin: 0;
+}
+
+#editor {
+    border: none;
+    color: #eee;
+    padding: 2em;
+    height: 300px;
+    min-height: 100%;
+    min-height: 50vh;
+    max-height: 100%;
+    background-color: #2b2b2b;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    resize: none;
+    height: 301px;
+}
+
+#compiled {
+	border-top: 1px solid #353535;
+	min-height: 50vh;
+	height: 100%;
+	margin: 0;
+	min-width: 100%;
+	max-width: 100%;
+	cursor:pointer!important;
+}
+#compiled .ace_scroller{
+	cursor:auto!important;
+}
+
+#output{
+	border-left: 1px solid #353535;
+	height: 100vh;
+	color: #eee;
+	padding :15px;
+}
+
+.row > .span8 {
+    margin: 0;
+}
+
+.ace_content, .ace_scroller {
+	background-color: #2b2b2b;
+}
+
+.ace_print-margin{
+	visibility: hidden !important;
+}
+
+#input {
+	position: relative;
+}
+
+#typecode {
+	position: relative;
+}
+
+#input span#svg {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    right: 20px;
+    z-index: 10;
+    bottom: 16px;
+}
+
+#input input {
+	display: none;
+}
+
+#input label{
+	cursor: pointer;
+}
+
+span#svg label svg path{
+	transition:.4s;
+}
+
+span#svg label svg:hover path{
+	fill:#999 !important;
+}
+
+span#svg label svg:active path{
+	fill:#fff !important;
+}
+ .ace_gutter,
+ .ace_editor{
+ 	min-width: 47px;
+ }

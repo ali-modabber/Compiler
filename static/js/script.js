@@ -161,15 +161,19 @@ Array.prototype.forEach.call( inputs, function( input )
     if ( input.files && input.files[0] )
     {
       file = input.files[0]; // The file
+
       fr = new FileReader(); // FileReader instance
       fr.onload = function ()
       {
         // Do stuff on onload, use fr.result for contents of file
         $("#newCode").val(fr.result);
         detectKeywords();
+        console.log($("#newCode").val(fr.result));
+
       };
       var a = fr.readAsText( file );
       // fr.readAsDataURL( file );
+
     }
     else
     {
