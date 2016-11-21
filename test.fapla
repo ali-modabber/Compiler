@@ -1,10 +1,19 @@
-test
-while:
-forhasan
-forhasan hasan reza ifx:
-%% salam
-abc
-if Salam
-Test ali modabber in khobe
+%%%this is build my regex,
+ and their documentation describes
+ the following:%%%
 
-true true return input: input: input: input:input:input:input:input return(:
+ module F
+ input:
+ X:real;
+ Output:real;
+ Begin
+  if x>0 then
+      Return f(x-1)+f(x-2);
+    return 1;
+End
+Module main
+Begin
+    I:Real;
+    I=20;
+    Write f(i);
+                i:real;

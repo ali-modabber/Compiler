@@ -2,69 +2,75 @@ var VARIABLES = {};
 var TOKENS    =
 {
   // ---------- while
-  "while "          : 'while',
+  "_while"          : 'while',
   // ---------- if
-  "if "             : 'if',
-  "if("             : 'if',
-  "if\n"            : 'if',
-  " then "          : 'then',
-  "\tthen "         : 'then',
-  "\nthen "         : 'then',
-  "\tthen "         : 'then',
-  "\nthen\n"        : 'then',
-  "\tthen\n"        : 'then',
-  "then\n"          : 'then',
-  "else "           : 'else',
-  "else\n"          : 'else',
-  "\nelse"          : 'else',
-  "\telse"          : 'else',
-  "\nelse\n"        : 'else',
-  "\telse\n"        : 'else',
+  "_if"             : 'if',
+  // "if "             : 'if',
+  // "if\n"            : 'if',
+  // " then "          : 'then',
+  // "\tthen "         : 'then',
+  // "\nthen "         : 'then',
+  // "\tthen "         : 'then',
+  // "\nthen\n"        : 'then',
+  // "\tthen\n"        : 'then',
+  // "then\n"          : 'then',
+  "_else"              : 'else',
+  // "else\n"          : 'else',
+  // "\nelse"          : 'else',
+  // "\telse"          : 'else',
+  // "\nelse\n"        : 'else',
+  // "\telse\n"        : 'else',
 
   // ---------- read write
-  "write "          : 'write',
-  "read "           : 'read',
+  "_write"          : 'write',
+  "_read"           : 'read',
 
   // ---------- module
-  "for"             : 'for',
-  " begin "         : 'begin',
-  "\nbegin"         : 'begin',
-  "\tbegin"         : 'begin',
-  "\nbegin\n"       : 'begin',
-  "\tbegin\n"       : 'begin',
-  " end "           : 'end',
-  "\nend"           : 'end',
-  "\tend"           : 'end',
-  "\nend\n"         : 'end',
-  "\tend\n"         : 'end',
-  ":bool"           : 'bool',
-  ":real"           : 'real',
-  ":string"         : 'string',
-  "true"            : 'true',
-  "false"           : 'false',
-  "module "         : 'module ',
+  // "for"             : 'for',
+  "_begin"         : 'begin',
+  // "\nbegin"         : 'begin',
+  // "\tbegin"         : 'begin',
+  // "\nbegin\n"       : 'begin',
+  // "\tbegin\n"       : 'begin',
+  "_end"           : 'end',
+  // "\nend"           : 'end',
+  // "\tend"           : 'end',
+  // "\nend\n"         : 'end',
+  // "\tend\n"         : 'end',
+  // ":bool"           : 'bool',
+  // ":real"           : 'real',
+  // ":string"         : 'string',
+  // "true"            : 'true',
+  // "false"           : 'false',
+  "_module"         : 'module',
 
-  "input:"          : 'input',
-  "input: "         : 'input',
-  " input: "        : 'input',
+  "_input"          : 'input',
+  // "input: "         : 'input',
+  // " input: "        : 'input',
 
-  "output:"         : 'output',
-  "output: "        : 'output',
-  " output: "       : 'output',
+  "_output"         : 'output',
+  //"output: "        : 'output',
+  // "output "        : 'output',
+  // " output: "       : 'output',
 
-  " return "        : 'return',
-  "\nreturn "       : 'return',
-  "\treturn "       : 'return',
-  " return("        : 'return',
-  "\nreturn("       : 'return',
-  "\treturn("       : 'return',
-
-  // ---------- comments
-  "!..comment..!"   : 'comment',
-  "!.comment.!"     : 'comment',
+  "_return"            : 'return',
+  // "\nreturn "       : 'return',
+  // "\treturn "       : 'return',
+  // " return("        : 'return',
+  // "\nreturn("       : 'return',
+  // "\treturn("       : 'return',
 
   // ---------- comments
-  "variable"        : 'variable',
+  "_!..comment..!"   : 'comment',
+  "_!.comment.!"     : 'comment',
+  "_variable"        : 'variable',
+  "_variableValue"   : 'valid-variable',
+  // "variable"      : 'variable',
+  // "variable\n"      : 'variable',
+  // " variable"       : 'variable',
+  // "variable "       : 'variable',
+
+  // ---------- comments
 
 };
 
@@ -198,10 +204,37 @@ function detectKeywords()
 
   // run filter of comments
   myCode = filter_comments(myCode);
-  // detect variables
-  detect_variables(myCode);
+  // run filter of output
+  myCode = detect_output(myCode);
+  // detect input
+  myCode = detect_input(myCode);
   // run filter of while
   myCode = filter_while(myCode);
+  // run filter of return
+  myCode = detect_return(myCode);
+  // detect variables
+  myCode = detect_variables(myCode);
+  // detect detect_variables_value
+  myCode = detect_variables_value(myCode);
+  // detect write
+  myCode = detect_write(myCode);
+  // detect read
+  myCode = detect_read(myCode);
+  // detect module
+  myCode = detect_module(myCode);
+  // detect if
+  myCode = detect_if(myCode);
+  // detect begin
+  myCode = detect_begin(myCode);
+  // detect end
+  myCode = detect_end(myCode);
+  // detect else
+  myCode = detect_else(myCode);
+
+  console.log(myCode);
+
+
+
 
 
   // foreach token, find this token is used
@@ -248,34 +281,114 @@ function detectKeywords()
 function filter_comments(_str)
 {
   // remove multi line comments
-  _str = _str.replace(/%%%(?:(?!%%%)[\s\S\n])*%%%/gim, '!..comment..!');
+  _str = _str.replace(/%%%(?:(?!%%%)[\s\S\n])*%%%/gim, '_!..comment..!');
   // remove one line comments
-  _str = _str.replace(/%%.*/gi, '!.comment.!');
+  _str = _str.replace(/%%.*/gi, '_!.comment.!');
   return _str;
 }
 
 function detect_variables(_str)
 {
   // work with VARIABLES
-  // console.log(_str);
-  var remove_variables = _str.match(/^(([^:])+:|([^=]+)=)(real|bool|string)$/)
-  if (remove_variables)
-  {
-    myVariables = remove_variables[0];
-    if (_str == myVariables)
+    if (_str)
     {
-      // console.log('variable');
-      myVariables = myVariables.replace(/^(([^:])+:|([^=]+)=)(real|bool|string)$/, 'variable');
-      console.log(myVariables);
+      if(_str != /^[\t\s]*output[\s\t]*:[\s\t\n]*(real|bool|string)[\s\t]*[;][\s\t]*$/gim && _str != /^[\t\s]*[a-z]+[\t\s]*[=][\t\s]*(\"[a-z0-9]+\"|[0-9]*)[\t\s]*[;][\t\s]*$/gi)
+      {
+        _str = _str.replace(/^[\t\s]*[a-z0-9]+[\t\s]*([:])[\t\s]*(real|bool|string)[\t\s]*[;][\t\s]*$/gi, '_variable');
+      }
     }
-  }
+        return _str;
+}
+
+function detect_variables_value(_str)
+{
+  // work with VARIABLES
+    if (_str)
+    {
+      if(_str != /^[\t\s]*output[\t\s]*:[\t\s]*(real|bool|string)[\t\s]*[;][\t\s]*$/gim)
+      {
+        _str = _str.replace(/^[\t\s]*[a-z]+[\t\s]*[=][\t\s]*(\"[a-z0-9]+\"|[0-9]*)[\t\s]*[;][\t\s]*$/gim, '_variableValue');
+      }
+    }
+        return _str;
+}
+
+function detect_output(_str)
+{
+  // work with VARIABLES
+  _str = _str.replace(/^[\t\s]*output[\s\t]*:[\s\t\n]*(real|bool|string)[\s\t]*[;][\s\t]*$/gim,'_output');
+  return _str;
+}
+
+function detect_input(_str)
+{
+  // work with VARIABLES
+  _str = _str.replace(/[\t\s]*input[\s\t]*:[\s\t]*$/gim,'_input');
+  return _str;
+}
+
+function detect_return(_str)
+{
+  // work with VARIABLES
+  _str = _str.replace(/^[\t\s]*return[\s\t]+(.*)[\s\t]*;[\s\t]*$/gim, '_return');
+  return _str;
+}
+
+function detect_module(_str)
+{
+  // work with VARIABLES
+  _str = _str.replace(/^[\t\s]*module[\s]+.+[\s\t]*$/gim,'_module');
+  return _str;
+}
+
+function detect_write(_str)
+{
+  // work with VARIABLES
+  _str = _str.replace(/^[\s\t]*write[\s\t]+[\".*\"][;][\s\t]*$/gim,'_write');
+  return _str;
+}
+
+function detect_read(_str)
+{
+  // work with VARIABLES
+  _str = _str.replace(/^[\t\s]*read[\s]+.*[;]$/gim,'_read');
+  return _str;
+}
+
+function detect_if(_str)
+{
+  // work with VARIABLES
+  _str = _str.replace(/^[\t\s]*if[\s\t]+(.+)[\s\t]+then[\s\t]*$/gim,'_if');
+  return _str;
+}
+
+function detect_begin(_str)
+{
+  // work with VARIABLES
+  _str = _str.replace(/^[\t\s]*begin[\s\t]*$/gim,'_begin');
+  return _str;
+}
+
+function detect_end(_str)
+{
+  // work with VARIABLES
+  _str = _str.replace(/^[\t\s]*end[\t\s]*$/gim,'_end');
+  return _str;
+}
+
+function detect_else(_str)
+{
+  // work with VARIABLES
+  _str = _str.replace(/^[\s\t]*else[\s\t\n]*$/gim,'_else '); //fgggggggggggggggggggggggggggggggggggggg
+  return _str;
 }
 
 function filter_while(_str)
 {
+  // work with VARIABLES
+  _str = _str.replace(/^[\s\t]*while[\s\t]+.*[\s\t]*$/gim,'_while ');
   return _str;
 }
-
 
 
 /**
@@ -300,9 +413,20 @@ function checkSyntax(_input)
     }
   });
 
+  // console.log(myCode);
+  // console.log("myErrors: "+myCode+"\t");
+
 
   // find code number above this line
   myCode = $.trim(myCode);
+
+
+  // show code errors
+  myErrors = myCode;
+  var showErrors = document.querySelectorAll("#compiledCode code");
+  showErrors[0].innerHTML = myErrors;
+  console.log(myErrors);
+
 
   // if something remain then we have error on code
   if(myCode.length)

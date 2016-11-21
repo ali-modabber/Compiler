@@ -16,14 +16,15 @@
           <input type="file" name="file" id="file" accept=".fapla" />
           <label class="custom-file-upload" for="file"><strong>upload File</strong></label>
         </div>
-        <div class="span2" id='keywords'><?php echo print_token(); ?></div>
+        <div class="span2"></div>
       </div>
       <pre id="compiledCode">
-        <code class="php"><?php echo(fapla_code()); ?></code>
+        <code class="php"></code>
+        <span id="failed">Code Errors</span>
       </pre>
     </div>
 
-    <div class="span3 result"></div>
+    <div class="span3 result" id='keywords'><?php echo print_token(); ?></div>
   </form>
 
   <!-- <script src="static/js/common.js"></script> -->
