@@ -21,6 +21,12 @@ function setValueInEditor(_txt)
 }
 
 
+function setCompiledValue(_txt)
+{
+  compiled.session.setValue(_txt);
+}
+
+
 (function($)
 {
   // Add click event handler to button
