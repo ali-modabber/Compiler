@@ -2,20 +2,19 @@ function teory(_str)
 {
 	var module_name, fn_arguments;
 	_str = _str.replace(/^[\n\s\t]*module[\s\t]+([a-z_]+)/gim, function(_find,_module_name){
-		module_name = _module_name;
+		// module_name = _module_name;
 		console.log(_module_name);
-
 		_module_name_js = "function "+_module_name+"(";
-
 		console.log(_module_name_js);
+		setCompiledValue(_module_name_js);
 		return '';
 	});
-
 		_str = _str.replace(/[\n\s\t]*input[\t\s]*:\n([\s\t\n]*[a-z]+[\t\s]*:[\t\s]*(real|bool|string)[\t\s]*;)+[\n\s\t]*(output)/gim, function(_str,_values){
 		var values = arguments[0].match(/([a-z]+[\s\t]*:[\s\t]*(bool|real|string))/igm);
-		// fn_arguments = values;
+		fn_arguments = values;
 		input_js = values + ")" + "{";
 		console.log(input_js);
+		setCompiledValue(input_js);
 		return 'output';
 	});
 	var output_type, _output_type;
@@ -40,10 +39,8 @@ function teory(_str)
 		console.log(code_block); 
 		return '';
 	});
-
 	var end 
 	end = /\n[\n\s\t]*end/gmi//;
-
 }
 // var str = "module function_one \ninput:\n x:real;\n	y:string;\n	b:bool;\noutput:real;\nbegin\n	return x*y;\nend \n %%%www salsdf fuck fsfdewsd24345erj656y7567ty34u324u324$^ %%%%";
 // str += "\nmodule function_two \ninput:\n	r:real;\n	t:string;\n	s:bool;\noutput:real;\nbegin\n	return r*s;\nend \n %%%www salsdf fuck fsfdewsd24345erj656y7567ty34u324u324$^ %%%%";
@@ -51,11 +48,8 @@ var str = ($("#editor").text());
 // str = str.tostring();
 str = str.match(/(module(?:(?!end)[\s\S\n])*end)/gim);
 // console.log(str);
-
-setCompiledValue('salam');
-
+// setCompiledValue('var a;');
 if(str != null){
-	// console.log("ffffffffffffffff");
 	for (var i = 0; i < str.length; i++) {
 		teory(str[i]);
 	}

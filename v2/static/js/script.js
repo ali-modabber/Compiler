@@ -9,23 +9,18 @@ compiled.setTheme("ace/theme/twilight");
 compiled.session.setMode("ace/mode/javascript");
 // compiled.setReadOnly(true);
 compiled.setOptions({readOnly: true,highlightActiveLine: false,highlightGutterLine: false,showLineNumbers: false});
-
 compiled.renderer.$cursorLayer.element.style.opacity=0;
 compiled.textInput.getElement().disabled=true;
-
-
 
 function setValueInEditor(_txt)
 {
   editor.session.setValue(_txt);
 }
 
-
 function setCompiledValue(_txt)
 {
   compiled.session.setValue(_txt);
 }
-
 
 (function($)
 {
@@ -46,7 +41,7 @@ function setCompiledValue(_txt)
       {
         // Do stuff on onload, use fr.result for contents of file
         $("#editor ace_text-input").val(fr.result);
-        console.log($("#editor ace_text-input").val());
+        // console.log($("#editor ace_text-input").val());
         setValueInEditor(fr.result);
         // detectKeywords();
       };
