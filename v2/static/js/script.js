@@ -4,6 +4,12 @@ editor.setTheme("ace/theme/twilight");
 editor.session.setMode("ace/mode/javascript");
 
 
+editor.on("input", function() 
+{
+  run();
+});
+
+
 var compiled = ace.edit("compiled");
 compiled.setTheme("ace/theme/twilight");
 compiled.session.setMode("ace/mode/javascript");
@@ -11,13 +17,20 @@ compiled.session.setMode("ace/mode/javascript");
 compiled.setOptions({readOnly: true,highlightActiveLine: false,highlightGutterLine: false,showLineNumbers: false});
 compiled.renderer.$cursorLayer.element.style.opacity=0;
 compiled.textInput.getElement().disabled=true;
+compiled.$blockScrolling = Infinity;
 
 function setValueInEditor(_txt)
 {
   editor.session.setValue(_txt);
 }
 
-function sessionetCompiledValue(_txt)
+function getEditorValue()
+{
+  return editor.session.getValue();
+}
+
+
+function setCompiledValue(_txt)
 {
   compiled.session.setValue(_txt);
 }
