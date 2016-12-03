@@ -31,5 +31,6 @@
  <script src="static/js/ace/ace.js"></script>
  <script src="static/js/script.js"></script>
  <script src="compailer.js"></script>
+ <script src="function.js"></script>
 </body>
 </html>
