@@ -17,7 +17,7 @@ function setValueInEditor(_txt)
   editor.session.setValue(_txt);
 }
 
-function setCompiledValue(_txt)
+function sessionetCompiledValue(_txt)
 {
   compiled.session.setValue(_txt);
 }
