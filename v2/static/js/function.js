@@ -1,4 +1,6 @@
 run();
+
+
 /**
  * run all of needed functions
  * @return {[type]} [description]
@@ -6,46 +8,125 @@ run();
 function run()
 {
 	// declare variables
-	var userCode = getEditorValue();
+	var userCode = getEditorValue().toLowerCase();
 	var myCode   = userCode;
 	var jsCode   = "";
 
 	// run needed functions
-	myCode = detect_comments(myCode);
-	// myCode = generateFunction(myCode);
+	myCode = detectComments(myCode);
+	myCode = detectFunctions(myCode);
 
 	// set compiled value in specefic aria in editor
 	setCompiledValue(myCode);
 }
 
+
+/**
+ * detect number of modules and run generateFuntion for each one
+ * @param  {[type]} _rawText [description]
+ * @return {[type]}      [description]
+ */
+function detectFunctions(_rawText)
+{
+	var result               = "";
+	var rawCode              = _rawText;
+	var fnExist              = true;
+	var myFunctions          = [];
+	var myConvertedFunctions = [];
+
+	// detect string of each module and push raw text to array
+	while(fnExist)
+	{
+		var currentFn = extractFunctions(rawCode);
+
+		if(currentFn === null)
+		{
+			fnExist = false;
+		}
+		else
+		{
+			myFunctions.push(currentFn);
+			rawCode = rawCode.replace(currentFn, '');
+		}
+	}
+
+	// run for each function detected
+	for (var i = 0; i < myFunctions.length; i++)
+	{
+		var currentConvertedFn = generateFunction(myFunctions[i]);
+		if(currentConvertedFn)
+		{
+			myConvertedFunctions.push(currentConvertedFn);
+		}
+	}
+
+	// for each success converted functition
+	var seperator = "\n\n// function ...\n";
+	result = myConvertedFunctions.join(seperator);
+
+	return result;
+}
+
+
+/**
+ * extract text of each function
+ * @param  {[type]} _txt [description]
+ * @return {[type]}      [description]
+ */
+function extractFunctions(_txt)
+{
+	var result  = _txt;
+	var f_start = result.indexOf('module');
+	var f_begin = result.indexOf('begin');
+	var f_end   = result.indexOf('end');
+	// if we have module then return it
+	if(f_start > 0 && f_begin > 5 && f_end > 9)
+	{
+		result = result.substring(f_start, f_end+3);
+	}
+	else
+	{
+		result = null;
+	}
+
+	return result;
+}
+
+
+/**
+ * detect all part of module and convert to js valid function
+ * @param  {[type]} _txt [description]
+ * @return {[type]}      [description]
+ */
 function generateFunction(_txt)
 {
 	var result  = "";
 	var name    = detect_module_name(_txt);
 	var inputs  = detect_module_input(_txt);
-	var output = detect_module_output(_txt);
+	var output  = detect_module_output(_txt);
 	var content = detect_module_content(_txt);
 	console.log(name);
 
 	result = 'function ' + name + '(' + inputs + ')' + "\n";
 	result += '{' + "\n";
 	result += content;
-	if(output)
-	{
-		result += "\n" + 'return ' + output ;
-	}
+	// if(output)
+	// {
+	// 	result += "\n" + 'return ' + output ;
+	// }
 	result += "\n" +'}';
 
 	// return generated result
 	return result;
 }
 
+
 /**
  * detect and remove comments
  * @param  {[type]} _txt [description]
  * @return {[type]}      [description]
  */
-function detect_comments(_txt)
+function detectComments(_txt)
 {
 	result = _txt;
 	// remove multi line comments
@@ -55,8 +136,6 @@ function detect_comments(_txt)
 
 	return result;
 }
-
-
 
 
 /**
@@ -74,6 +153,12 @@ function detect_module_name(_text)
 	return str;
 }
 
+
+/**
+ * [detect_module_input description]
+ * @param  {[type]} _text [description]
+ * @return {[type]}       [description]
+ */
 function detect_module_input(_text)
 {
 	var str = _text;
@@ -82,6 +167,12 @@ function detect_module_input(_text)
 	return str;
 }
 
+
+/**
+ * [detect_module_output description]
+ * @param  {[type]} _text [description]
+ * @return {[type]}       [description]
+ */
 function detect_module_output(_text)
 {
 	var str = _text;
@@ -89,6 +180,12 @@ function detect_module_output(_text)
 	return ;
 }
 
+
+/**
+ * [detect_module_content description]
+ * @param  {[type]} _text [description]
+ * @return {[type]}       [description]
+ */
 function detect_module_content(_text){
 	var str = _text;
 	str = str.match(/^[\n\s\t]*begin\n([\s\t\n]*(.*))\n[\n\s\t]*end/gmi);

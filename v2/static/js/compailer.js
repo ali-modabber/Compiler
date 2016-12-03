@@ -32,7 +32,7 @@ function teory(_str)
 		output_js = values + ")";
 		console.log(input_js);
 		return 'begin';
-	});					
+	});
 	// 	var Input_Variable,_Input_Variable ;
 	// 	_str = _str.replace(/^[\n\s\t]*input[\t\s]*:\n([\s\t\n]*[a-z]+[\t\s]*:[\t\s]*(real|bool|string)[\t\s]*;)+[\n\s\t]*(begin)/gim, function(_find){
 	// 	var Input_Variable= arguments[0].match(/([\s\t]*:[\s\t]*(bool|real|string))/gi);
@@ -44,10 +44,10 @@ function teory(_str)
 		var code_block = arguments[0].match(/^[\n\s\t]*begin\n[\s\t\n]*(.*)\n[\n\s\t]*end/gmi);
 		// content = code_block;
 		code_block = "}";
-		console.log(code_block); 
+		console.log(code_block);
 		return '';
 	});
-	var end 
+	var end
 	end = /\n[\n\s\t]*end/gmi//;
 }
 // var str = "module function_one \ninput:\n x:real;\n	y:string;\n	b:bool;\noutput:real;\nbegin\n	return x*y;\nend \n %%%www salsdf fuck fsfdewsd24345erj656y7567ty34u324u324$^ %%%%";
@@ -64,8 +64,8 @@ if(str != null){
 }
 else
 {
-	console.log("Error");	
-} 
+	console.log("Error");
+}
 
 
 // function function_one(x, y, b)
