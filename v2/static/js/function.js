@@ -8,7 +8,7 @@ run();
 function run()
 {
 	// declare variables
-	var userCode = getEditorValue().toLowerCase();
+	var userCode = getEditorValue().toLowerCase().trim();
 	var myCode   = userCode;
 	var jsCode   = "";
 
@@ -83,6 +83,7 @@ function extractFunctions(_txt)
 	if(f_start > 0 && f_begin > 5 && f_end > 9)
 	{
 		result = result.substring(f_start, f_end+3);
+		result = result.trim();
 	}
 	else
 	{
@@ -100,16 +101,34 @@ function extractFunctions(_txt)
  */
 function generateFunction(_txt)
 {
-	var result  = "";
-	var name    = detect_module_name(_txt);
-	var inputs  = detect_module_input(_txt);
-	var output  = detect_module_output(_txt);
-	var content = detect_module_content(_txt);
-	console.log(name);
+	var str      = _txt;
+	var result   = "";
+	var fnDetail =
+	{
+		module : str.indexOf('module'),
+		input  : str.indexOf('input'),
+		output : str.indexOf('output'),
+		begin  : str.indexOf('begin'),
+		end    : str.indexOf('end')
+	};
 
-	result = 'function ' + name + '(' + inputs + ')' + "\n";
+
+	var name    = detect_module_name(str, fnDetail);
+	var inputs  = detect_module_input(str, fnDetail);
+	var output  = detect_module_output(str, fnDetail);
+	var content = detect_module_content(str, fnDetail);
+
+	result = 'function ' + name + '(';
+	if(inputs)
+	{
+		result += inputs;
+	}
+	result += ')' + "\n";
 	result += '{' + "\n";
-	result += content;
+	if(content)
+	{
+		result += content;
+	}
 	// if(output)
 	// {
 	// 	result += "\n" + 'return ' + output ;
@@ -144,13 +163,25 @@ function detectComments(_txt)
  * @return {[type]}
  */
 
-function detect_module_name(_text)
+function detect_module_name(_text, _detail)
 {
-	str = _text;
-	// var str = _text.replace(/^[\n\s\t]*module[\s\t]+([a-z_]+)/gim, function(_content, _name){
-	// 	return _name;
-	// });
-	return str;
+	var str    = _text;
+	var myName = "";
+	if(_detail['input'] > 0)
+	{
+		myName = _text.substring(6, _detail['input']);
+	}
+	else if(_detail['output'] > 0)
+	{
+		myName = _text.substring(6, _detail['output']);
+	}
+	else if(_detail['begin'] > 0)
+	{
+		myName = _text.substring(6, _detail['begin']);
+	}
+	// trim to remove extra space from name
+	myName = myName.trim();
+	return myName;
 }
 
 
@@ -161,10 +192,11 @@ function detect_module_name(_text)
  */
 function detect_module_input(_text)
 {
-	var str = _text;
+	var str    = _text;
+	var result = null;
 	str = str.match(/[\n\s\t]*input[\t\s]*:((?!output).)+([\n\t\s]*output)/gim);
 	// console.log();
-	return str;
+	return result;
 }
 
 
@@ -175,9 +207,11 @@ function detect_module_input(_text)
  */
 function detect_module_output(_text)
 {
-	var str = _text;
+	var str    = _text;
+	var result = null;
+
 	str = str.match(/^[\n\s\t]*output[\t\s]*:[\t\s]*(real|bool|string)[\t\s]*;{1}[\n\s\t]*(begin)/gim);
-	return ;
+	return result;
 }
 
 
@@ -186,10 +220,13 @@ function detect_module_output(_text)
  * @param  {[type]} _text [description]
  * @return {[type]}       [description]
  */
-function detect_module_content(_text){
-	var str = _text;
+function detect_module_content(_text)
+{
+	var str    = _text;
+	var result = null;
+
 	str = str.match(/^[\n\s\t]*begin\n([\s\t\n]*(.*))\n[\n\s\t]*end/gmi);
-	return str;
+	return result;
 }
 
 
