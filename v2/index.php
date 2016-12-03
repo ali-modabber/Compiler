@@ -17,7 +17,7 @@
        <input type="file" name="file" id="file" accept=".fapla" />
        <label for="file"><img src='static/images/upload.svg'></label>
      </span>
-     <pre id="editor"><?php include("code.php") ?></pre>
+     <pre id="editor"><?php include("index-code.php") ?></pre>
     </div>
     <pre id="compiled"></pre>
    </div>
@@ -30,7 +30,6 @@
  <script src="static/js/jquery-3.1.1.min.js"></script>
  <script src="static/js/ace/ace.js"></script>
  <script src="static/js/script.js"></script>
- <!-- <script src="compailer.js"></script> -->
- <script src="function.js"></script>
+ <script src="static/js/function.js"></script>
 </body>
 </html>

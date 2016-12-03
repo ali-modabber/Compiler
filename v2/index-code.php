@@ -1,16 +1,20 @@
-function foo(items)
-{
- var i;
- for (i = 0; i &lt; items.length; i++)
- {
-  alert("Ace Rocks " + items[i]);
- }
-}
-// var str = "module function_one
+%%%this is build my regex,
+ and their documentation describes
+ the following:%%%
 
-input:
- x:real;  output 
-
- y:string;\n b:bool;output:real;\nbegin\n  return x*y;\n
-
- end \n %%%www salsdf fuck fsfdewsd24345erj656y7567ty34u324u324$^ %%%%";
+ module F
+ input:
+ X:real;
+ Output:real;
+ Begin
+  if x>0 then
+      Return f(x-1)+f(x-2);
+    return 1;
+End
+Module main
+Begin
+    I:Real;
+    I=20;
+    Write f(i);
+                i:real;
+End

@@ -67,3 +67,15 @@ else
 	console.log("Error");	
 } 
 
+
+// function function_one(x, y, b)
+// {
+// 	var x = parseInt(x);
+// 	var y = new String(y);
+// 	var b = new Boolean(b);
+// 	return paresInt(z*y);
+// }
+
+// function main()
+
+
