@@ -7,6 +7,7 @@ run();
  */
 function run()
 {
+	detector(input);
 	// declare variables
 	var userCode = getEditorValue().toLowerCase().trim();
 	var myCode   = userCode;
@@ -191,17 +192,24 @@ function detect_module_name(_text, _detail)
  */
 
 
-var find_elements = function detector(_elm)
+function detector()
 {
-	for (var i = 0; i < _elm.length; i++)
-	{
-		var position = position.indexOf(_elm);
-		var lenght = _elm.substring();
+	// _argument = input;
+    for (i = 0; i < arguments.length; i++)
+    {
+		var position 	= indexOf(_arguments);
+		console.log(po);
+		var count 		= position + _arguments.length;
 
-		// detector(input);
-		// return positoion;
+		if (_arguments > 1)
+		{
+			var contant	 = substring(position + count , _arguments[i++]);
+			return contant;
+		}
 	}
+	detector(input)
 }
+
 
 function detect_module_input(_text)
 {
