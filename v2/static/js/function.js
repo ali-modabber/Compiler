@@ -189,27 +189,27 @@ function detect_module_name(_text, _detail)
  * @param  {[type]} _text [description]
  * @return {[type]}       [description]
  */
+
+
+var find_elements = function detector(_elm)
+{
+	for (var i = 0; i < _elm.length; i++)
+	{
+		var position = position.indexOf(_elm);
+		var lenght = _elm.substring();
+
+		// detector(input);
+		// return positoion;
+	}
+}
+
 function detect_module_input(_text)
 {
 	var str    = _text;
 	var result = null;
 	// str = str.match(/[\n\s\t]*(input[\t\s]*:(\n[\s\t\n]*[a-z]*[\s\t\n]*)+:([a-z]*[\s\t\n]*)+;)/);
 	var reg = /[\n\s\t]*(input[\t\s]*:\n([\s\t\n]*[a-z]*[\s\t\n]*)+:([a-z]*[\s\t\n]*)+;)/;
-	var exe = reg.exec(str);
-	// exe = exe.trim();
-
-
-	for (var e in exe)
-	{
-		if (typeof exe[e] === 'string')
-		{
-			exe[e] = exe[e].trim();
-			console.log(exe[e]);
-		}
-	}
-	return result;
 }
-
 /**
  * [detect_module_output description]
  * @param  {[type]} _text [description]
@@ -222,7 +222,6 @@ function detect_module_output(_text)
 	str = str.match(/^[\n\s\t]*output[\t\s]*:[\t\s]*(real|bool|string)[\t\s]*;{1}[\n\s\t]*(begin)/gim);
 	return result;
 }
-
 
 /**
  * [detect_module_content description]
@@ -242,8 +241,6 @@ function detect_keywords(_text)
 	var str = _text;
 	return str;
 }
-
-
 
 function detect_write(_text)
 {
