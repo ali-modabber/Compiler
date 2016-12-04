@@ -8,15 +8,6 @@ function teory(_str)
 		setCompiledValue(_module_name_js);
 		return '';
 	);
-
-
-
-
-
-
-
-
-
 		_str = _str.replace(/[\n\s\t]*input[\t\s]*:\n([\s\t\n]*[a-z]+[\t\s]*:[\t\s]*(real|bool|string)[\t\s]*;)+[\n\s\t]*(output)/gim;
 		var values = arguments[0].match(/([a-z]+[\s\t]*:[\s\t]*(bool|real|string))/igm);
 		fn_arguments = values;
@@ -66,8 +57,6 @@ else
 {
 	console.log("Error");
 }
-
-
 // function function_one(x, y, b)
 // {
 // 	var x = parseInt(x);

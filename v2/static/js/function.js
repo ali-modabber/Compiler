@@ -112,7 +112,6 @@ function generateFunction(_txt)
 		end    : str.indexOf('end')
 	};
 
-
 	var name    = detect_module_name(str, fnDetail);
 	var inputs  = detect_module_input(str, fnDetail);
 	var output  = detect_module_output(str, fnDetail);
@@ -139,12 +138,12 @@ function generateFunction(_txt)
 	return result;
 }
 
-
 /**
  * detect and remove comments
  * @param  {[type]} _txt [description]
  * @return {[type]}      [description]
  */
+
 function detectComments(_txt)
 {
 	result = _txt;
@@ -194,11 +193,22 @@ function detect_module_input(_text)
 {
 	var str    = _text;
 	var result = null;
-	str = str.match(/[\n\s\t]*input[\t\s]*:((?!output).)+([\n\t\s]*output)/gim);
-	// console.log();
+	// str = str.match(/[\n\s\t]*(input[\t\s]*:(\n[\s\t\n]*[a-z]*[\s\t\n]*)+:([a-z]*[\s\t\n]*)+;)/);
+	var reg = /[\n\s\t]*(input[\t\s]*:\n([\s\t\n]*[a-z]*[\s\t\n]*)+:([a-z]*[\s\t\n]*)+;)/;
+	var exe = reg.exec(str);
+	// exe = exe.trim();
+
+
+	for (var e in exe)
+	{
+		if (typeof exe[e] === 'string')
+		{
+			exe[e] = exe[e].trim();
+			console.log(exe[e]);
+		}
+	}
 	return result;
 }
-
 
 /**
  * [detect_module_output description]
@@ -209,7 +219,6 @@ function detect_module_output(_text)
 {
 	var str    = _text;
 	var result = null;
-
 	str = str.match(/^[\n\s\t]*output[\t\s]*:[\t\s]*(real|bool|string)[\t\s]*;{1}[\n\s\t]*(begin)/gim);
 	return result;
 }
@@ -224,19 +233,9 @@ function detect_module_content(_text)
 {
 	var str    = _text;
 	var result = null;
-
 	str = str.match(/^[\n\s\t]*begin\n([\s\t\n]*(.*))\n[\n\s\t]*end/gmi);
 	return result;
 }
-
-
-
-
-
-
-
-
-
 
 function detect_keywords(_text)
 {
