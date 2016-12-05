@@ -163,22 +163,7 @@ function detectComments(_txt)
 
 function detect_module_name(_text, _detail)
 {
-	var str    = _text;
-	var myName = "";
-	if(_detail['input'] > 0)
-	{
-		myName = _text.substring(6, _detail['input']);
-	}
-	else if(_detail['output'] > 0)
-	{
-		myName = _text.substring(6, _detail['output']);
-	}
-	else if(_detail['begin'] > 0)
-	{
-		myName = _text.substring(6, _detail['begin']);
-	}
-	// trim to remove extra space from name
-	myName = myName.trim();
+	var myName = detector(_text,[null, 'module', 'input|output|begin']);
 	return myName;
 }
 
@@ -207,11 +192,11 @@ function detector(_code)
 			$.each(splited, function(index, el)
 			{
 				searchExist = _code.indexOf(el);
-				if(searchExist > 0)
+				if(searchExist >= 0)
 				{
 					searchStart = searchExist;
 					searchStart = searchStart + el.length;
-					return true;
+					return false;
 				}
 			});
 
@@ -223,16 +208,23 @@ function detector(_code)
 			$.each(splited, function(index, el)
 			{
 				searchExist = _code.indexOf(el, searchStart);
-				if(searchExist > 0)
+				if(searchExist >= 0)
 				{
 					searchEnd = searchExist;
-					return true;
+					return false;
 				}
 			});
 		}
 
 		searchResult       = _code.substring(searchStart, searchEnd);
-		result[searchName] = searchResult.trim();
+		if(searchName)
+		{
+			result[searchName] = searchResult.trim();
+		}
+		else
+		{
+			result = searchResult.trim();
+		}
 	}
 
 	return result;
@@ -245,8 +237,8 @@ function detect_module_input(_text)
 	var result = null;
 
 	// var myvar = detector(_text,  ['str2', null, ':bool;|:real;|:string;']);
-	var myvar = detector(_text,  ['str2', 'input:', ':real;']);
-	console.log(myvar);
+	// var myvar = detector(_text,  ['str2', 'input:', ':real;']);
+	// console.log(myvar);
 
 
 	// detector(test, ['str1', 'start', 'end'] , ['str2', 'min', 'max']);
