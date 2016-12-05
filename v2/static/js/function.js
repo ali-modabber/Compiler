@@ -36,7 +36,9 @@ function detector(_code)
 		var searchStartTxt = arguments[i][1];
 		var searchEndTxt   = arguments[i][2];
 		var searchStart    = 0;
+		var searchStartRaw = 0;
 		var searchEnd      = _code.length;
+		var searchEndEnd   = searchEnd;
 		// if we have start search argument
 		if(searchStartTxt)
 		{
@@ -46,8 +48,8 @@ function detector(_code)
 				searchExist = _code.indexOf(el);
 				if(searchExist >= 0)
 				{
-					searchStart = searchExist;
-					searchStart = searchStart + el.length;
+					searchStartRaw = searchExist;
+					searchStart    = searchStartRaw + el.length;
 					return false;
 				}
 			});
@@ -62,7 +64,8 @@ function detector(_code)
 				searchExist = _code.indexOf(el, searchStart);
 				if(searchExist >= 0)
 				{
-					searchEnd = searchExist;
+					searchEnd    = searchExist;
+					searchEndEnd = searchEnd + el.length;
 					return false;
 				}
 			});
@@ -71,6 +74,8 @@ function detector(_code)
 		searchResult       = _code.substring(searchStart, searchEnd);
 		if(searchName)
 		{
+			var findedText     = _code.substring(searchStartRaw, searchEndEnd);
+			result['remain']      = _code.replace(findedText, '').trim();
 			result[searchName] = searchResult.trim();
 		}
 		else
@@ -238,17 +243,42 @@ function detect_module_name(_text, _detail)
  */
 function detect_module_input(_text)
 {
+	// detect input part from module
 	var myInputs = detector(_text, [null, 'input:', 'output|begin']);
-	console.log(myInputs);
-	detect_inputs(myInputs);
+	// detect input name and return string of variable names
+	var inputNames = detect_inputs(myInputs, true);
+	// return result
+	return inputNames;
 }
 
 
-function detect_inputs(_text)
+/**
+ * detect input and return array
+ * @param  {[type]} _text [description]
+ * @return {[type]}       [description]
+ */
+function detect_inputs(_text, _string)
 {
-	var myVars = detector(_text, ['var', null, ':real;|:bool;|:string;']);
-	console.log(myVars);
-	return myVars['var'];
+	var str    = _text;
+	var result = [];
+	while(str)
+	{
+		var myVars = detector(str, ['var', null, ':real;|:bool;|:string;']);
+		if(myVars['var'])
+		{
+			str = myVars['remain'];
+			result.push(myVars['var']);
+		}
+		else
+		{
+			str = '';
+		}
+	}
+	if(_string)
+	{
+		result = result.join(', ');
+	}
+	return result;
 }
 
 
