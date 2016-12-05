@@ -21,6 +21,69 @@ function run()
 
 
 /**
+ * [detect_module_input description]
+ * @param  {[type]} _text [description]
+ * @return {[type]}       [description]
+ */
+
+function detector(_code)
+{
+	var result = [];
+	for (i = 1; i < arguments.length; i++)
+	{
+		var searchResult   = "";
+		var searchName     = arguments[i][0];
+		var searchStartTxt = arguments[i][1];
+		var searchEndTxt   = arguments[i][2];
+		var searchStart    = 0;
+		var searchEnd      = _code.length;
+		// if we have start search argument
+		if(searchStartTxt)
+		{
+			var splited = searchStartTxt.split('|');
+			$.each(splited, function(index, el)
+			{
+				searchExist = _code.indexOf(el);
+				if(searchExist >= 0)
+				{
+					searchStart = searchExist;
+					searchStart = searchStart + el.length;
+					return false;
+				}
+			});
+
+		}
+		// if we have end search argument
+		if(searchEndTxt)
+		{
+			var splited = searchEndTxt.split('|');
+			$.each(splited, function(index, el)
+			{
+				searchExist = _code.indexOf(el, searchStart);
+				if(searchExist >= 0)
+				{
+					searchEnd = searchExist;
+					return false;
+				}
+			});
+		}
+
+		searchResult       = _code.substring(searchStart, searchEnd);
+		if(searchName)
+		{
+			result[searchName] = searchResult.trim();
+		}
+		else
+		{
+			result = searchResult.trim();
+		}
+	}
+
+	return result;
+}
+
+
+/**
  * detect number of modules and run generateFuntion for each one
  * @param  {[type]} _rawText [description]
  * @return {[type]}      [description]
@@ -163,7 +226,7 @@ function detectComments(_txt)
 
 function detect_module_name(_text, _detail)
 {
-	var myName = detector(_text,[null, 'module', 'input|output|begin']);
+	var myName = detector(_text, [null, 'module', 'input|output|begin']);
 	return myName;
 }
 
@@ -173,78 +236,22 @@ function detect_module_name(_text, _detail)
  * @param  {[type]} _text [description]
  * @return {[type]}       [description]
  */
-
-function detector(_code)
-{
-	var result = [];
-	for (i = 1; i < arguments.length; i++)
-	{
-		var searchResult   = "";
-		var searchName     = arguments[i][0];
-		var searchStartTxt = arguments[i][1];
-		var searchEndTxt   = arguments[i][2];
-		var searchStart    = 0;
-		var searchEnd      = _code.length;
-		// if we have start search argument
-		if(searchStartTxt)
-		{
-			var splited = searchStartTxt.split('|');
-			$.each(splited, function(index, el)
-			{
-				searchExist = _code.indexOf(el);
-				if(searchExist >= 0)
-				{
-					searchStart = searchExist;
-					searchStart = searchStart + el.length;
-					return false;
-				}
-			});
-
-		}
-		// if we have end search argument
-		if(searchEndTxt)
-		{
-			var splited = searchEndTxt.split('|');
-			$.each(splited, function(index, el)
-			{
-				searchExist = _code.indexOf(el, searchStart);
-				if(searchExist >= 0)
-				{
-					searchEnd = searchExist;
-					return false;
-				}
-			});
-		}
-
-		searchResult       = _code.substring(searchStart, searchEnd);
-		if(searchName)
-		{
-			result[searchName] = searchResult.trim();
-		}
-		else
-		{
-			result = searchResult.trim();
-		}
-	}
-
-	return result;
-}
-
-
 function detect_module_input(_text)
 {
-	var str    = _text;
-	var result = null;
-
-	// var myvar = detector(_text,  ['str2', null, ':bool;|:real;|:string;']);
-	// var myvar = detector(_text,  ['str2', 'input:', ':real;']);
-	// console.log(myvar);
-
-
-	// detector(test, ['str1', 'start', 'end'] , ['str2', 'min', 'max']);
-	// str = str.match(/[\n\s\t]*(input[\t\s]*:(\n[\s\t\n]*[a-z]*[\s\t\n]*)+:([a-z]*[\s\t\n]*)+;)/);
-	var reg = /[\n\s\t]*(input[\t\s]*:\n([\s\t\n]*[a-z]*[\s\t\n]*)+:([a-z]*[\s\t\n]*)+;)/;
+	var myInputs = detector(_text, [null, 'input:', 'output|begin']);
+	console.log(myInputs);
+	detect_inputs(myInputs);
 }
+
+
+function detect_inputs(_text)
+{
+	var myVars = detector(_text, ['var', null, ':real;|:bool;|:string;']);
+	console.log(myVars);
+	return myVars['var'];
+}
+
+
 /**
  * [detect_module_output description]
  * @param  {[type]} _text [description]

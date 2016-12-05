@@ -5,6 +5,8 @@
  module F
  input:
  X:real;
+ Y:bool;
+ Z:string;
  Output:real;
  Begin
   if x>0 then
