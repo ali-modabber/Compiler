@@ -11,10 +11,3 @@
       Return f(x-1)+f(x-2);
     return 1;
 End
-Module main
-Begin
-    I:Real;
-    I=20;
-    Write f(i);
-                i:real;
-End

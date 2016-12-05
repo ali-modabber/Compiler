@@ -1,13 +1,11 @@
 run();
 
-
 /**
  * run all of needed functions
  * @return {[type]} [description]
  */
 function run()
 {
-	detector(input);
 	// declare variables
 	var userCode = getEditorValue().toLowerCase().trim();
 	var myCode   = userCode;
@@ -191,23 +189,53 @@ function detect_module_name(_text, _detail)
  * @return {[type]}       [description]
  */
 
-
-function detector()
+function detector(_code)
 {
-	// _argument = input;
-    for (i = 0; i < arguments.length; i++)
-    {
-		var position 	= indexOf(_arguments);
-		console.log(po);
-		var count 		= position + _arguments.length;
-
-		if (_arguments > 1)
+	var result = [];
+	for (i = 1; i < arguments.length; i++)
+	{
+		var searchResult   = "";
+		var searchName     = arguments[i][0];
+		var searchStartTxt = arguments[i][1];
+		var searchEndTxt   = arguments[i][2];
+		var searchStart    = 0;
+		var searchEnd      = _code.length;
+		// if we have start search argument
+		if(searchStartTxt)
 		{
-			var contant	 = substring(position + count , _arguments[i++]);
-			return contant;
+			var splited = searchStartTxt.split('|');
+			$.each(splited, function(index, el)
+			{
+				searchExist = _code.indexOf(el);
+				if(searchExist > 0)
+				{
+					searchStart = searchExist;
+					searchStart = searchStart + el.length;
+					return true;
+				}
+			});
+
 		}
+		// if we have end search argument
+		if(searchEndTxt)
+		{
+			var splited = searchEndTxt.split('|');
+			$.each(splited, function(index, el)
+			{
+				searchExist = _code.indexOf(el, searchStart);
+				if(searchExist > 0)
+				{
+					searchEnd = searchExist;
+					return true;
+				}
+			});
+		}
+
+		searchResult       = _code.substring(searchStart, searchEnd);
+		result[searchName] = searchResult.trim();
 	}
-	detector(input)
+
+	return result;
 }
 
 
@@ -215,6 +243,13 @@ function detect_module_input(_text)
 {
 	var str    = _text;
 	var result = null;
+
+	// var myvar = detector(_text,  ['str2', null, ':bool;|:real;|:string;']);
+	var myvar = detector(_text,  ['str2', 'input:', ':real;']);
+	console.log(myvar);
+
+
+	// detector(test, ['str1', 'start', 'end'] , ['str2', 'min', 'max']);
 	// str = str.match(/[\n\s\t]*(input[\t\s]*:(\n[\s\t\n]*[a-z]*[\s\t\n]*)+:([a-z]*[\s\t\n]*)+;)/);
 	var reg = /[\n\s\t]*(input[\t\s]*:\n([\s\t\n]*[a-z]*[\s\t\n]*)+:([a-z]*[\s\t\n]*)+;)/;
 }
