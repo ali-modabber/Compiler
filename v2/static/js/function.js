@@ -263,7 +263,7 @@ function detect_inputs(_text, _string)
 	var result = [];
 	while(str)
 	{
-		var myVars = detector(str, ['var', null, ':real;|:bool;|:string;']);
+		var myVars = detector(str, ['var', null,':real;|:bool;|:string;']);
 		if(myVars['var'])
 		{
 			str = myVars['remain'];
@@ -300,13 +300,53 @@ function detect_module_output(_text)
  * @param  {[type]} _text [description]
  * @return {[type]}       [description]
  */
+function detect_contants(_text)
+{
+	// var str    = _text;
+	// var result = null;
+	// str = str.match(/^[\n\s\t]*begin\n([\s\t\n]*(.*))\n[\n\s\t]*end/gmi);
+}
+//////////////////////////////////////////////
 function detect_module_content(_text)
 {
+	// detect input part from module
+	var mycontent = detector(_text, [null, 'begin', 'end']);
+	// detect input name and return string of variable names
+	var contentsNames = detect_contants(mycontent, true);
+	// return result
+	return contentNames;
+}
+
+/**
+ * detect input and return array
+ * @param  {[type]} _text [description]
+ * @return {[type]}       [description]
+ */
+function detect_content(_text, _string)
+{
 	var str    = _text;
-	var result = null;
-	str = str.match(/^[\n\s\t]*begin\n([\s\t\n]*(.*))\n[\n\s\t]*end/gmi);
+	var result = [];
+	while(str)
+	{
+		var myVars = detector(str, ['var', null,'end']);
+		if(myVars['var'])
+		{
+			str = myVars['remain'];
+			result.push(myVars['var']);
+		}
+		else
+		{
+			str = '';
+		}
+	}
+	if(_string)
+	{
+		result = result.join(', ');
+	}
 	return result;
 }
+
+///////////////////////////////////////////////////////
 
 function detect_keywords(_text)
 {
