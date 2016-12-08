@@ -235,7 +235,6 @@ function detect_module_name(_text, _detail)
 	return myName;
 }
 
-
 /**
  * [detect_module_input description]
  * @param  {[type]} _text [description]
@@ -300,22 +299,14 @@ function detect_module_output(_text)
  * @param  {[type]} _text [description]
  * @return {[type]}       [description]
  */
-function detect_contants(_text)
-{
-	// var str    = _text;
-	// var result = null;
-	// str = str.match(/^[\n\s\t]*begin\n([\s\t\n]*(.*))\n[\n\s\t]*end/gmi);
-}
+// function detect_contants(_text)
+// {
+// 	var str    = _text;
+// 	var result = null;
+// 	str = str.match(/^[\n\s\t]*begin\n([\s\t\n]*(.*))\n[\n\s\t]*end/gmi);
+// }
 //////////////////////////////////////////////
-function detect_module_content(_text)
-{
-	// detect input part from module
-	var mycontent = detector(_text, [null, 'begin', 'end']);
-	// detect input name and return string of variable names
-	var contentsNames = detect_contants(mycontent, true);
-	// return result
-	return contentNames;
-}
+
 
 /**
  * detect input and return array
@@ -346,6 +337,16 @@ function detect_content(_text, _string)
 	return result;
 }
 
+
+function detect_module_content(_text)
+{
+	// detect input part from module
+	var mycontent = detector(_text, [null, 'begin', 'End']);
+	// detect input name and return string of variable names
+	var contentsNames = detect_content(mycontent, true);
+	// return result
+	return contentsNames;
+}
 ///////////////////////////////////////////////////////
 
 function detect_keywords(_text)
