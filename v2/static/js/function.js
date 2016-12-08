@@ -20,12 +20,6 @@ function run()
 }
 
 
-/**
- * [detect_module_input description]
- * @param  {[type]} _text [description]
- * @return {[type]}       [description]
- */
-
 function detector(_code)
 {
 	var result = [];
@@ -71,12 +65,12 @@ function detector(_code)
 			});
 		}
 
-		searchResult       = _code.substring(searchStart, searchEnd);
+		searchResult       		= _code.substring(searchStart, searchEnd);
 		if(searchName)
 		{
-			var findedText     = _code.substring(searchStartRaw, searchEndEnd);
-			result['remain']      = _code.replace(findedText, '').trim();
-			result[searchName] = searchResult.trim();
+			var findedText      = _code.substring(searchStartRaw, searchEndEnd);
+			result['remain']    = _code.replace(findedText, '').trim();
+			result[searchName]  = searchResult.trim();
 		}
 		else
 		{
@@ -179,10 +173,11 @@ function generateFunction(_txt)
 		end    : str.indexOf('end')
 	};
 
-	var name    = detect_module_name(str, fnDetail);
-	var inputs  = detect_module_input(str, fnDetail);
-	var output  = detect_module_output(str, fnDetail);
-	var content = detect_module_content(str, fnDetail);
+	var name    	= detect_module_name(str, fnDetail);
+	var inputs  	= detect_module_input(str, fnDetail);
+	var output  	= detect_module_output(str, fnDetail);
+	var content 	= detect_module_content(str, fnDetail);
+	var condition   = detect_module_content(str, fnDetail)
 
 	result = 'function ' + name + '(';
 	if(inputs)
@@ -191,6 +186,7 @@ function generateFunction(_txt)
 	}
 	result += ')' + "\n";
 	result += '{' + "\n";
+
 	if(content)
 	{
 		result += content;
@@ -199,11 +195,22 @@ function generateFunction(_txt)
 	// {
 	// 	result += "\n" + 'return ' + output ;
 	// }
-	result += "\n" +'}';
+	result += '\n'+'}';
 
 	// return generated result
 	return result;
+
+	if(condition)
+	{
+		result += condition;
+	}
+	result += "if" + "(" + condition + ")";
+
+	// return generated result
+
+	return result;
 }
+
 
 /**
  * detect and remove comments
@@ -234,6 +241,7 @@ function detect_module_name(_text, _detail)
 	var myName = detector(_text, [null, 'module', 'input|output|begin']);
 	return myName;
 }
+
 
 /**
  * [detect_module_input description]
@@ -342,6 +350,48 @@ function detect_module_content(_text)
 }
 
 
+/////////////////////////////////////////
+function condition(_text, _string)
+{
+	var str    = _text;
+	var result = [];
+	while(str)
+	{
+		var myVars = detector(str, ['var', 'if', '\n']);
+		if(myVars['var'])
+		{
+			str = myVars['remain'];
+			result.push(myVars['var']);
+		}
+		else
+		{
+			str = '';
+		}
+	}
+	if(_string)
+	{
+		result = result.join(', ');
+	}
+
+	return result ;
+}
+
+
+/**
+ * [detect_module_content description]
+ * @param  {[type]} _text [description]
+ * @return {[type]}       [description]
+ */
+function detect_condition(_text)
+{
+	// detect input part from module
+	var mycontent = detector(_text, [null, 'if', '\n']);
+	// detect input name and return string of variable names
+	var conditionNames = detect_condition(mycondition, true);
+	// return result
+	return conditionNames;
+}
+///////////////////////////////////////////////
 function detect_keywords(_text)
 {
 	var str = _text;
@@ -363,6 +413,7 @@ function detect_real(_text)
 
 function detect_if(_text)
 {
+
 	var str = _text;
 	return str;
 }
@@ -372,7 +423,6 @@ function detect_while(_text)
 	var str = _text;
 	return str;
 }
-
 
 function my_variables(_text)
 {
