@@ -294,22 +294,9 @@ function detect_module_output(_text)
 	return result;
 }
 
-/**
- * [detect_module_content description]
- * @param  {[type]} _text [description]
- * @return {[type]}       [description]
- */
-// function detect_contants(_text)
-// {
-// 	var str    = _text;
-// 	var result = null;
-// 	str = str.match(/^[\n\s\t]*begin\n([\s\t\n]*(.*))\n[\n\s\t]*end/gmi);
-// }
-//////////////////////////////////////////////
-
 
 /**
- * detect input and return array
+ * detect content and return array
  * @param  {[type]} _text [description]
  * @return {[type]}       [description]
  */
@@ -334,10 +321,16 @@ function detect_content(_text, _string)
 	{
 		result = result.join(', ');
 	}
-	return result;
+
+	return result ;
 }
 
 
+/**
+ * [detect_module_content description]
+ * @param  {[type]} _text [description]
+ * @return {[type]}       [description]
+ */
 function detect_module_content(_text)
 {
 	// detect input part from module
@@ -347,7 +340,7 @@ function detect_module_content(_text)
 	// return result
 	return contentsNames;
 }
-///////////////////////////////////////////////////////
+
 
 function detect_keywords(_text)
 {
@@ -380,30 +373,6 @@ function detect_while(_text)
 	return str;
 }
 
-function new_code(_text)
-{
-	var str = _text;
-	str = str
-	return str;
-}
-
-function js_code(_text)
-{
-	var str = _text;
-	return str;
-}
-
-function my_code(_text)
-{
-	var str = _text;
-	return str;
-}
-
-function my_function(_text)
-{
-	var str = _text;
-	return str;
-}
 
 function my_variables(_text)
 {
