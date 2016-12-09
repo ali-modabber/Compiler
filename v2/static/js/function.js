@@ -170,16 +170,20 @@ function generateFunction(_txt)
 		input  : str.indexOf('input'),
 		output : str.indexOf('output'),
 		begin  : str.indexOf('begin'),
-		end    : str.indexOf('end')
+		end    : str.indexOf('end'),
+		if     : str.indexOf('if'),
 	};
 
 	var name    	= detect_module_name(str, fnDetail);
 	var inputs  	= detect_module_input(str, fnDetail);
 	var output  	= detect_module_output(str, fnDetail);
 	var content 	= detect_module_content(str, fnDetail);
-	var condition   = detect_module_content(str, fnDetail)
+	var condition   = detect_module_condition(str, fnDetail)
 
 	result = 'function ' + name + '(';
+
+
+	//input convert
 	if(inputs)
 	{
 		result += inputs;
@@ -187,27 +191,33 @@ function generateFunction(_txt)
 	result += ')' + "\n";
 	result += '{' + "\n";
 
+
+	//contetn convert
 	if(content)
 	{
 		result += content;
 	}
+
+
+	// output convert
 	// if(output)
 	// {
 	// 	result += "\n" + 'return ' + output ;
 	// }
 	result += '\n'+'}';
-
 	// return generated result
 	return result;
 
+
+	//condition convert
 	if(condition)
 	{
+		console.log(ffffff);
 		result += condition;
 	}
 	result += "if" + "(" + condition + ")";
-
 	// return generated result
-
+	console.log("fffffffff");
 	return result;
 }
 
@@ -351,47 +361,44 @@ function detect_module_content(_text)
 
 
 /////////////////////////////////////////
-function condition(_text, _string)
+ function detect_condition(_text, _string)
+ {
+ 	var str    = _text;
+ 	var result = [];
+ 	while(str)
+ 	{
+ 		var myVars = detector(str, ['var', 'if', 'then']);
+ 		if(myVars['var'])
+ 		{
+ 			str = myVars['remain'];
+ 			result.push(myVars['var']);
+ 		}
+ 		else
+ 		{
+ 			str = '';
+ 		}
+ 	}
+ 	if(_string)
+ 	{
+ 		result = result.join(', ');
+ 	}
+
+ 	return result ;
+ }
+
+function detect_module_condition(_text)
 {
-	var str    = _text;
-	var result = [];
-	while(str)
-	{
-		var myVars = detector(str, ['var', 'if', '\n']);
-		if(myVars['var'])
-		{
-			str = myVars['remain'];
-			result.push(myVars['var']);
-		}
-		else
-		{
-			str = '';
-		}
-	}
-	if(_string)
-	{
-		result = result.join(', ');
-	}
-
-	return result ;
-}
-
-
-/**
- * [detect_module_content description]
- * @param  {[type]} _text [description]
- * @return {[type]}       [description]
- */
-function detect_condition(_text)
-{
+	// console.log("fffffffff");
 	// detect input part from module
-	var mycontent = detector(_text, [null, 'if', '\n']);
+	var mycondition = detector(_text, [null, 'if', 'then']);
 	// detect input name and return string of variable names
 	var conditionNames = detect_condition(mycondition, true);
 	// return result
 	return conditionNames;
 }
-///////////////////////////////////////////////
+///////////////////////////
+
+
 function detect_keywords(_text)
 {
 	var str = _text;
