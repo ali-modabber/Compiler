@@ -363,26 +363,26 @@ function detect_module_content(_text)
 	console.log(mycondition);
 }
 
-function detect_module_condition(_text)
+function detect_module_while(_text)
 {
 	var str 	  =  _text;
 	var end  	  =  detector(_text, [null , 'if' , 'then | and']);
 	var then 	  =  detector(_text, [null , 'if'   , 'then']);
-	var condition
+	var while
 
  		// var myVars = detector(str, [null, 'then', 'end']);
 	 	if (then && end)
 		{
-			 condition ="if" + " " + "(" + then + ")" + '\n' +"{";
-			 console.log(condition);
-			// return condition;
-			// console.log(condition);
+			 while ="if" + " " + "(" + then + ")" + '\n' +"{";
+			 console.log(while);
+			// return while;
+			// console.log(while);
 		}
  		else
  		{
  			str = '';
  		}
-	 	return condition;
+	 	return while;
  	}
 ///////////////////////////
 function detect_module_condition(_text)
@@ -390,21 +390,21 @@ function detect_module_condition(_text)
 	var str 	  =  _text;
 	var end  	  =  detector(_text, [null , 'if' , 'then | and']);
 	var then 	  =  detector(_text, [null , 'if'   , 'then']);
-	var condition
+	var while
 
  		// var myVars = detector(str, [null, 'then', 'end']);
 	 	if (then && end)
 		{
-			 condition ="if" + " " + "(" + then + ")" + '\n' +"{";
-			 console.log(condition);
-			// return condition;
-			// console.log(condition);
+			 while ="if" + " " + "(" + then + ")" + '\n' +"{";
+			 console.log(while);
+			// return while;
+			// console.log(while);
 		}
  		else
  		{
  			str = '';
  		}
-	 	return condition;
+	 	return while;
  	}
 ///////////////////////////
 
