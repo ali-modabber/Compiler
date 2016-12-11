@@ -1,4 +1,27 @@
 run();
+/**
+ * [seperatorNotExist description]
+ * @param  {[type]} _text [description]
+ * @return {[type]}       [description]
+ */
+function seperatorNotExist(_text)
+{
+	var result     = true;
+	var seperators = [' ', "\n", "\t", "\s"];
+	seperators.forEach(function(el)
+	{
+		console.log(el);
+		console.log(_text.indexOf(el));
+		if(_text.indexOf(el) >=0)
+		{
+			result = false;
+			return false;
+		}
+	});
+
+	return result;
+}
+
 
 /**
  * run all of needed functions
@@ -20,6 +43,11 @@ function run()
 }
 
 
+/**
+ * detect inout string and return needed if find it
+ * @param  {[type]} _code [description]
+ * @return {[type]}       [description]
+ */
 function detector(_code)
 {
 	var result = [];
@@ -162,25 +190,15 @@ function extractFunctions(_txt)
  */
 function generateFunction(_txt)
 {
-	var str      = _txt;
-	var result   = "";
-	var fnDetail =
-	{
-		module : str.indexOf('module'),
-		input  : str.indexOf('input'),
-		output : str.indexOf('output'),
-		begin  : str.indexOf('begin'),
-		end    : str.indexOf('end'),
-		if     : str.indexOf('if'),
-		if     : str.indexOf('while')
-	};
+	var result    = "";
+	var str       = _txt;
+	var name      = detect_module_name(str);
+	var inputs    = detect_module_input(str);
+	var output    = detect_module_output(str);
+	var content   = detect_module_content(str);
 
-	var name    	= detect_module_name(str, fnDetail);
-	var inputs  	= detect_module_input(str, fnDetail);
-	var output  	= detect_module_output(str, fnDetail);
-	var content 	= detect_module_content(str, fnDetail);
-	var condition   = detect_module_condition(str, fnDetail);
-	var condition   = detect_module_while(str, fnDetail);
+	var condition = detect_module_condition(str);
+	var condition = detect_module_while(str);
 
 	result = 'function ' + name + '(';
 
@@ -210,24 +228,6 @@ function generateFunction(_txt)
 	result += '\n'+'}';
 	// return generated result
 	return result;
-
-
-	//condition convert
-	if(condition)
-	{
-		result += condition;
-	}
-	result += "if" + "(" + condition + ")";
-	// return generated result
-	// console.log("fffffffff");
-	return result;
-	//while convert
-	if(_while)
-	{
-		result += _while;
-	}
-	result += "while" + "(" + _while + ")";
-	return result;
 }
 
 /**
@@ -254,7 +254,7 @@ function detectComments(_txt)
  * @return {[type]}
  */
 
-function detect_module_name(_text, _detail)
+function detect_module_name(_text)
 {
 	var myName = detector(_text, [null, 'module', 'input|output|begin']);
 	return myName;
@@ -289,7 +289,8 @@ function detect_inputs(_text, _string)
 	while(str)
 	{
 		var myVars = detector(str, ['var', null ,':real;|:bool;|:string;']);
-		if(myVars['var'])
+
+		if(myVars['var'] && seperatorNotExist(myVars))
 		{
 			str = myVars['remain'];
 			result.push(myVars['var']);
@@ -370,27 +371,29 @@ function detect_module_content(_text)
 	// console.log(mycondition);
 }
 
+
 function detect_module_condition(_text)
 {
 	var str 	  =  _text;
-	var end  	  =  detector(_text, [null , 'if' , 'then | and']);
-	var then 	  =  detector(_text, [null , 'if'   , 'then']);
+	var end  	  =  detector(_text, [null , 'if' , 'end']);
+	var then 	  =  detector(_text, [null , 'if' , 'then']);
 	var condition;
 
- 		// var myVars = detector(str, [null, 'then', 'end']);
-	 	if (then && end)
+		// var myVars = detector(str, [null, 'then', 'end']);
+	if (then && end)
+	{
+		 condition ="if (" + then + ")" + "\n" +"{";
+		 // console.log(condition);
+		// return condition;
+		// console.log(condition);
+	}
+		else
 		{
-			 condition ="if" + " " + "(" + then + ")" + '\n' +"{";
-			 // console.log(condition);
-			// return condition;
-			// console.log(condition);
+			str = '';
 		}
- 		else
- 		{
- 			str = '';
- 		}
-	 	return condition;
+	return condition;
 }
+
 
 function detect_module_while(_text)
 {
@@ -399,20 +402,20 @@ function detect_module_while(_text)
 	var so 	  	  =  detector(_text, [null , 'while' , '\n']);
 	var _while;
 
- 		// var myVars = detector(str, [null, 'then', 'end']);
-	 	if (so && end)
+		// var myVars = detector(str, [null, 'then', 'end']);
+		if (so && end)
 		{
 			 _while ="while" + " " + "(" + so + ")" + '\n' +"{";
 			// return while;
 			// console.log(while);
 		// console.log(_while);
 		}
- 		else
- 		{
- 			str = '';
- 		}
-	 	return _while;
- 	}
+		else
+		{
+			str = '';
+		}
+		return _while;
+	}
 
 
 
@@ -426,6 +429,7 @@ function detect_keywords(_text)
 	return str;
 }
 
+
 function detect_write(_text)
 {
 	var str = _text;
@@ -433,11 +437,13 @@ function detect_write(_text)
 	return str;
 }
 
+
 function detect_real(_text)
 {
 	var str = _text;
 	return str;
 }
+
 
 function lang_keywords(_text)
 {
