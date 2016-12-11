@@ -368,12 +368,12 @@ function detect_module_while(_text)
 	var str 	  =  _text;
 	var end  	  =  detector(_text, [null , 'if' , 'then | and']);
 	var then 	  =  detector(_text, [null , 'if'   , 'then']);
-	var while
+	var _while
 
  		// var myVars = detector(str, [null, 'then', 'end']);
 	 	if (then && end)
 		{
-			 while ="if" + " " + "(" + then + ")" + '\n' +"{";
+			 _while ="if" + " " + "(" + then + ")" + '\n' +"{";
 			 console.log(while);
 			// return while;
 			// console.log(while);
@@ -382,7 +382,7 @@ function detect_module_while(_text)
  		{
  			str = '';
  		}
-	 	return while;
+	 	return _while;
  	}
 ///////////////////////////
 function detect_module_condition(_text)
@@ -390,21 +390,21 @@ function detect_module_condition(_text)
 	var str 	  =  _text;
 	var end  	  =  detector(_text, [null , 'if' , 'then | and']);
 	var then 	  =  detector(_text, [null , 'if'   , 'then']);
-	var while
+	var condition;
 
  		// var myVars = detector(str, [null, 'then', 'end']);
 	 	if (then && end)
 		{
-			 while ="if" + " " + "(" + then + ")" + '\n' +"{";
-			 console.log(while);
-			// return while;
-			// console.log(while);
+			 condition ="if" + " " + "(" + then + ")" + '\n' +"{";
+			 console.log(condition);
+			// return condition;
+			// console.log(condition);
 		}
  		else
  		{
  			str = '';
  		}
-	 	return while;
+	 	return condition;
  	}
 ///////////////////////////
 
