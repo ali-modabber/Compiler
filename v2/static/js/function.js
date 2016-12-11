@@ -172,21 +172,22 @@ function generateFunction(_txt)
 		begin  : str.indexOf('begin'),
 		end    : str.indexOf('end'),
 		if     : str.indexOf('if'),
-		if     : str.indexOf('while'),
+		if     : str.indexOf('while')
 	};
 
 	var name    	= detect_module_name(str, fnDetail);
 	var inputs  	= detect_module_input(str, fnDetail);
 	var output  	= detect_module_output(str, fnDetail);
 	var content 	= detect_module_content(str, fnDetail);
-	var condition   = detect_module_condition(str, fnDetail)
-	var condition   = detect_module_while(str, fnDetail)
+	var condition   = detect_module_condition(str, fnDetail);
+	var condition   = detect_module_while(str, fnDetail);
 
 	result = 'function ' + name + '(';
 
 
 	//input convert
 	if(inputs)
+
 	{
 		result += inputs;
 	}
@@ -220,8 +221,14 @@ function generateFunction(_txt)
 	// return generated result
 	// console.log("fffffffff");
 	return result;
+	//while convert
+	if(_while)
+	{
+		result += _while;
+	}
+	result += "while" + "(" + _while + ")";
+	return result;
 }
-
 
 /**
  * detect and remove comments
@@ -281,7 +288,7 @@ function detect_inputs(_text, _string)
 	var result = [];
 	while(str)
 	{
-		var myVars = detector(str, ['var', null,':real;|:bool;|:string;']);
+		var myVars = detector(str, ['var', null ,':real;|:bool;|:string;']);
 		if(myVars['var'])
 		{
 			str = myVars['remain'];
@@ -360,31 +367,9 @@ function detect_module_content(_text)
 	var contentsNames = detect_content(mycontent, true);
 	// return result
 	return contentsNames;
-	console.log(mycondition);
+	// console.log(mycondition);
 }
 
-function detect_module_while(_text)
-{
-	var str 	  =  _text;
-	var end  	  =  detector(_text, [null , 'if' , 'then | and']);
-	var then 	  =  detector(_text, [null , 'if'   , 'then']);
-	var _while
-
- 		// var myVars = detector(str, [null, 'then', 'end']);
-	 	if (then && end)
-		{
-			 _while ="if" + " " + "(" + then + ")" + '\n' +"{";
-			 console.log(while);
-			// return while;
-			// console.log(while);
-		}
- 		else
- 		{
- 			str = '';
- 		}
-	 	return _while;
- 	}
-///////////////////////////
 function detect_module_condition(_text)
 {
 	var str 	  =  _text;
@@ -396,7 +381,7 @@ function detect_module_condition(_text)
 	 	if (then && end)
 		{
 			 condition ="if" + " " + "(" + then + ")" + '\n' +"{";
-			 console.log(condition);
+			 // console.log(condition);
 			// return condition;
 			// console.log(condition);
 		}
@@ -405,13 +390,39 @@ function detect_module_condition(_text)
  			str = '';
  		}
 	 	return condition;
+}
+
+function detect_module_while(_text)
+{
+	var str 	  =  _text;
+	var end  	  =  detector(_text, [null , 'while' , '\n']);
+	var so 	  	  =  detector(_text, [null , 'while' , '\n']);
+	var _while;
+
+ 		// var myVars = detector(str, [null, 'then', 'end']);
+	 	if (so && end)
+		{
+			 _while ="while" + " " + "(" + so + ")" + '\n' +"{";
+			// return while;
+			// console.log(while);
+		// console.log(_while);
+		}
+ 		else
+ 		{
+ 			str = '';
+ 		}
+	 	return _while;
  	}
-///////////////////////////
+
 
 
 function detect_keywords(_text)
 {
 	var str = _text;
+		for (var i = 0; i < Things.length; i++)
+		{
+			Things[i]
+		}
 	return str;
 }
 
@@ -423,25 +434,6 @@ function detect_write(_text)
 }
 
 function detect_real(_text)
-{
-	var str = _text;
-	return str;
-}
-
-function detect_if(_text)
-{
-
-	var str = _text;
-	return str;
-}
-
-function detect_while(_text)
-{
-	var str = _text;
-	return str;
-}
-
-function my_variables(_text)
 {
 	var str = _text;
 	return str;
