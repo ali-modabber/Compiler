@@ -172,6 +172,7 @@ function generateFunction(_txt)
 		begin  : str.indexOf('begin'),
 		end    : str.indexOf('end'),
 		if     : str.indexOf('if'),
+		if     : str.indexOf('while'),
 	};
 
 	var name    	= detect_module_name(str, fnDetail);
@@ -179,6 +180,7 @@ function generateFunction(_txt)
 	var output  	= detect_module_output(str, fnDetail);
 	var content 	= detect_module_content(str, fnDetail);
 	var condition   = detect_module_condition(str, fnDetail)
+	var condition   = detect_module_while(str, fnDetail)
 
 	result = 'function ' + name + '(';
 
@@ -361,7 +363,28 @@ function detect_module_content(_text)
 	console.log(mycondition);
 }
 
+function detect_module_condition(_text)
+{
+	var str 	  =  _text;
+	var end  	  =  detector(_text, [null , 'if' , 'then | and']);
+	var then 	  =  detector(_text, [null , 'if'   , 'then']);
+	var condition
 
+ 		// var myVars = detector(str, [null, 'then', 'end']);
+	 	if (then && end)
+		{
+			 condition ="if" + " " + "(" + then + ")" + '\n' +"{";
+			 console.log(condition);
+			// return condition;
+			// console.log(condition);
+		}
+ 		else
+ 		{
+ 			str = '';
+ 		}
+	 	return condition;
+ 	}
+///////////////////////////
 function detect_module_condition(_text)
 {
 	var str 	  =  _text;
