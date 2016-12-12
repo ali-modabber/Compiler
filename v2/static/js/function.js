@@ -7,11 +7,10 @@ run();
 function seperatorNotExist(_text)
 {
 	var result     = true;
-	var seperators = [' ', "\n", "\t", "\s"];
+	var seperators = [' ', "\n", "\t"];
+
 	seperators.forEach(function(el)
 	{
-		console.log(el);
-		console.log(_text.indexOf(el));
 		if(_text.indexOf(el) >=0)
 		{
 			result = false;
@@ -290,7 +289,7 @@ function detect_inputs(_text, _string)
 	{
 		var myVars = detector(str, ['var', null ,':real;|:bool;|:string;']);
 
-		if(myVars['var'] && seperatorNotExist(myVars))
+		if(myVars['var'] && seperatorNotExist(myVars['var']))
 		{
 			str = myVars['remain'];
 			result.push(myVars['var']);
