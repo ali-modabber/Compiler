@@ -1,4 +1,7 @@
 run();
+
+window.errorExist = false;
+
 /**
  * [seperatorNotExist description]
  * @param  {[type]} _text [description]
@@ -289,10 +292,19 @@ function detect_inputs(_text, _string)
 	{
 		var myVars = detector(str, ['var', null ,':real;|:bool;|:string;']);
 
-		if(myVars['var'] && seperatorNotExist(myVars['var']))
+		if(myVars['var'])
 		{
 			str = myVars['remain'];
-			result.push(myVars['var']);
+			if(seperatorNotExist(myVars['var']))
+			{
+				result.push(myVars['var']);
+				console.log("");
+			}
+			else
+			{
+				window.errorExist = true;
+
+			}
 		}
 		else
 		{
@@ -301,6 +313,7 @@ function detect_inputs(_text, _string)
 	}
 	if(_string)
 	{
+				// console.log(myVars['remain']);
 		result = result.join(', ');
 	}
 	return result;
