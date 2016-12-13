@@ -42,6 +42,12 @@ function run()
 
 	// set compiled value in specefic aria in editor
 	setCompiledValue(myCode);
+
+	if(window.errorExist)
+	{
+		// add class
+	}
+
 }
 
 
@@ -198,12 +204,11 @@ function generateFunction(_txt)
 	var inputs    = detect_module_input(str);
 	var output    = detect_module_output(str);
 	var content   = detect_module_content(str);
-
 	var condition = detect_module_condition(str);
 	var condition = detect_module_while(str);
 
-	result = 'function ' + name + '(';
 
+	result = 'function ' + name + '(';
 
 	//input convert
 	if(inputs)
@@ -295,16 +300,18 @@ function detect_inputs(_text, _string)
 		if(myVars['var'])
 		{
 			str = myVars['remain'];
-			if(seperatorNotExist(myVars['var']))
-			{
-				result.push(myVars['var']);
-				console.log("");
-			}
-			else
-			{
-				window.errorExist = true;
 
+			console.log(myVars['remain']);
+			if () {}
+			if(seperatorNotExist(myVars['var']) && (myVars['remain']))
+			{
+					console.log(myVars['remain']);
+					result.push(myVars['var']);
 			}
+			else{
+					window.errorExist = true;
+					// return false;
+				}
 		}
 		else
 		{
@@ -318,7 +325,47 @@ function detect_inputs(_text, _string)
 	}
 	return result;
 }
+// function detect_inputs(_text, _string)
+// {
+// 	var str    = _text;
+// 	var result = [];
+// 	for (_var i = 0; i < _var.length; i++)
+// 	{
 
+// 		var myVars = detector(str, ['_var', null ,':real;|:bool;|:string;']);
+
+// 		if(myVars['_var'])
+// 		{
+// 			str = myVars['remain'];
+
+// 			if(seperatorNotExist(myVars['_var']) )
+// 			{
+// 				if( var.length - 1.slice(-1) == ';')
+// 				{
+// 				console.log((myVars['remain']));
+// 				result.push(myVars['_var']);
+// 				}
+// 			}
+// 			else
+// 			{
+// 				window.errorExist = true;
+// 				// return false;
+
+// 			}
+// 		}
+// 	}
+// 		else
+// 		{
+// 			str = '';
+// 		}
+// 	}
+// 	if(_string)
+// 	{
+// 				// console.log(myVars['remain']);
+// 		result = result.join(', ');
+// 	}
+// 	return result;
+// }
 
 /**
  * [detect_module_output description]
@@ -428,7 +475,6 @@ function detect_module_while(_text)
 		}
 		return _while;
 	}
-
 
 
 function detect_keywords(_text)
