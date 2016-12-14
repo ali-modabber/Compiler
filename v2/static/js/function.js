@@ -100,6 +100,21 @@ function detector(_code)
 				}
 			});
 		}
+			// if we have some thing middel search argument
+		if(searchEndTxt)
+		{
+			var splited = searchEndTxt.split('|');
+			$.each(splited, function(index, el)
+			{
+				searchExist = _code.indexOf(el, searchStart);
+				if(searchExist >= 0)
+				{
+					searchEnd    = searchExist;
+					searchEndEnd = searchEnd + el.length;
+					return false;
+				}
+			});
+		}
 
 		searchResult       		= _code.substring(searchStart, searchEnd);
 		if(searchName)
@@ -293,19 +308,21 @@ function detect_inputs(_text, _string)
 {
 	var str    = _text;
 	var result = [];
+	// console.log(str);
 	while(str)
 	{
+
 		var myVars = detector(str, ['var', null ,':real;|:bool;|:string;']);
+
 
 		if(myVars['var'])
 		{
 			str = myVars['remain'];
+			console.log(myVars['var']);
 
-			console.log(myVars['remain']);
-			if () {}
-			if(seperatorNotExist(myVars['var']) && (myVars['remain']))
+			// console.log(myVars['remain']);
+			if(seperatorNotExist(myVars['var']) && ((myVars['var']).slice(-1) == ";" && (myVars['var']).indexOf(':') == -1 ))
 			{
-					console.log(myVars['remain']);
 					result.push(myVars['var']);
 			}
 			else{
