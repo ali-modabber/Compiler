@@ -105,21 +105,6 @@ function detector(_code)
 				}
 			});
 		}
-			// if we have some thing middel search argument
-		// if(searchEndTxt)
-		// {
-		// 	var splited = searchEndTxt.split('|');
-		// 	$.each(splited, function(index, el)
-		// 	{
-		// 		searchExist = _code.indexOf(el, searchStart);
-		// 		if(searchExist >= 0)
-		// 		{
-		// 			searchEnd    = searchExist;
-		// 			searchEndEnd = searchEnd + el.length;
-		// 			return false;
-		// 		}
-		// 	});
-		// }
 
 		if(searchEnd)
 		{
@@ -230,9 +215,6 @@ function generateFunction(_txt)
 	var inputs    = detect_module_input(str);
 	var output    = detect_module_output(str);
 	var content   = detect_module_content(str);
-	var condition = detect_module_condition(str);
-	var condition = detect_module_while(str);
-
 
 	result = 'function ' + name + '(';
 
@@ -332,7 +314,7 @@ function detect_inputs(_text, _string)
 			// console.log(myVars['remain']);
 			if(seperatorNotExist(myVars['var']))
 			{
-					result.push(myVars['var']);
+				result.push(myVars['var']);
 			}
 			else
 			{
@@ -412,7 +394,7 @@ function detect_content(_text, _string)
 		result = result.join(', ');
 	}
 
-	return result ;
+	return result;
 }
 
 
@@ -424,37 +406,109 @@ function detect_content(_text, _string)
 function detect_module_content(_text)
 {
 	// detect input part from module
-	var mycontent = detector(_text, [null, 'begin', 'End']);
-	var mycondition = detector(_text, [null,'if', 'then']);
+	var str       = _text;
+	var myContent = detector(str, [null, 'begin', 'end']);
+	var result    = myContent;
+	console.log(myContent);
+
+
+	result = detect_if(result);
+
+
+
 
 	// detect input name and return string of variable names
-	var contentsNames = detect_content(mycontent, true);
+	// var contentsNames = detect_content(myContent, true);
 	// return result
-	return contentsNames;
+	return result;
 	// console.log(mycondition);
 }
 
 
-function detect_module_condition(_text)
+function detect_if(_text)
 {
-	var str 	  =  _text;
-	var end  	  =  detector(_text, [null , 'if' , 'end']);
-	var then 	  =  detector(_text, [null , 'if' , 'then']);
-	var condition;
+	var str          = _text;
+	var result       = [];
+	var hasError     = false;
 
-		// var myVars = detector(str, [null, 'then', 'end']);
-	if (then && end)
+	while(str)
 	{
-		 condition ="if (" + then + ")" + "\n" +"{";
-		 // console.log(condition);
-		// return condition;
-		// console.log(condition);
-	}
+		var iftotal      = detector(str, ['total','if', ';']);
+		var ifcond       = detector(str, ['cond','if', 'then']);
+		var ifbody       = detector(str, ['body','then', ';']);
+
+		var ifblockstart = detector(str, ['block','if', '{']);
+		var ifblockend   = detector(str, ['block','if', '}']);
+
+
+		// var ifelse    = detector(str, ['body','if', 'else']);
+
+		if(ifcond['cond'] && ifblockstart['block'] && ifblockend['block'])
+		{
+			var ifbodyblock = detector(str, ['body','{', '}']);
+			// we have if with block of code
+			str = ifblockend['remain'];
+
+			var iffinded = '\tif ('+ ifcond.cond + ")\n\t{\n\t\t" + ifbodyblock.body + ";\n\t}";
+			result.push(iffinded);
+
+		}
+		else if(ifcond['cond'] && iftotal['total'] && ifbody['body'])
+		{
+			// we have a new if
+			// remove string with new one without totalif
+			str = iftotal['remain'];
+
+			if(seperatorNotExist(ifcond['cond']))
+			{
+				// current if is true create text of if in js
+				var iffinded = '\tif ('+ ifcond.cond + ")\n\t{\n\t\t" + ifbody.body + ";\n\t}";
+				result.push(iffinded);
+			}
+			else
+			{
+				hasError = true;
+			}
+		}
 		else
 		{
+			console.log('end.....');
 			str = '';
 		}
-	return condition;
+
+
+	}
+
+
+
+	console.log(result);
+
+
+
+
+
+	if(hasError)
+	{
+		window.errorExist['if'] = true;
+		// window.errorExist.push('input');
+		result = '#ERROR#';
+	}
+	else
+	{
+		delete window.errorExist.input;
+
+		// if(_string)
+		// {
+		// 			// console.log(myVars['remain']);
+		// 	result = result.join(', ');
+		// }
+	}
+
+	return result;
+
+
+
+
 }
 
 
