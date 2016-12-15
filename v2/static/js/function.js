@@ -449,7 +449,7 @@ function detect_if(_text)
 			// we have if with block of code
 			str = ifblockend['remain'];
 
-			var iffinded = '\tif ('+ ifcond.cond + ")\n\t{\n\t\t" + ifbodyblock.body + ";\n\t}";
+			var iffinded = '\tif ('+ ifcond.cond + ")\n\t{\n\t\t" + ifbodyblock.body + "\n\t}";
 			result.push(iffinded);
 
 		}
