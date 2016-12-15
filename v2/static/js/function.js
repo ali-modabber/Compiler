@@ -1,6 +1,6 @@
+window.errorExist = [];
 run();
 
-window.errorExist = false;
 
 /**
  * [seperatorNotExist description]
@@ -43,9 +43,14 @@ function run()
 	// set compiled value in specefic aria in editor
 	setCompiledValue(myCode);
 
-	if(window.errorExist)
+	if(Object.keys(window.errorExist).length)
 	{
 		// add class
+		$('.error').fadeIn();
+	}
+	else
+	{
+		$('.error').fadeOut();
 	}
 
 }
@@ -67,8 +72,8 @@ function detector(_code)
 		var searchEndTxt   = arguments[i][2];
 		var searchStart    = 0;
 		var searchStartRaw = 0;
-		var searchEnd      = _code.length;
-		var searchEndEnd   = searchEnd;
+		var searchEnd      = null;
+		var searchEndEnd   = null;
 		// if we have start search argument
 		if(searchStartTxt)
 		{
@@ -101,32 +106,38 @@ function detector(_code)
 			});
 		}
 			// if we have some thing middel search argument
-		if(searchEndTxt)
+		// if(searchEndTxt)
+		// {
+		// 	var splited = searchEndTxt.split('|');
+		// 	$.each(splited, function(index, el)
+		// 	{
+		// 		searchExist = _code.indexOf(el, searchStart);
+		// 		if(searchExist >= 0)
+		// 		{
+		// 			searchEnd    = searchExist;
+		// 			searchEndEnd = searchEnd + el.length;
+		// 			return false;
+		// 		}
+		// 	});
+		// }
+
+		if(searchEnd)
 		{
-			var splited = searchEndTxt.split('|');
-			$.each(splited, function(index, el)
+			searchResult = _code.substring(searchStart, searchEnd);
+			searchResult = searchResult.trim()
+
+			if(searchName)
 			{
-				searchExist = _code.indexOf(el, searchStart);
-				if(searchExist >= 0)
-				{
-					searchEnd    = searchExist;
-					searchEndEnd = searchEnd + el.length;
-					return false;
-				}
-			});
+				var findedText      = _code.substring(searchStartRaw, searchEndEnd);
+				result['remain']    = _code.replace(findedText, '').trim();
+				result[searchName]  = searchResult;
+			}
+			else
+			{
+				result = searchResult;
+			}
 		}
 
-		searchResult       		= _code.substring(searchStart, searchEnd);
-		if(searchName)
-		{
-			var findedText      = _code.substring(searchStartRaw, searchEndEnd);
-			result['remain']    = _code.replace(findedText, '').trim();
-			result[searchName]  = searchResult.trim();
-		}
-		else
-		{
-			result = searchResult.trim();
-		}
 	}
 
 	return result;
@@ -306,83 +317,59 @@ function detect_module_input(_text)
  */
 function detect_inputs(_text, _string)
 {
-	var str    = _text;
-	var result = [];
+	var str      = _text;
+	var result   = [];
+	var hasError = false;
 	// console.log(str);
 	while(str)
 	{
-
 		var myVars = detector(str, ['var', null ,':real;|:bool;|:string;']);
-
 
 		if(myVars['var'])
 		{
 			str = myVars['remain'];
-			console.log(myVars['var']);
 
 			// console.log(myVars['remain']);
-			if(seperatorNotExist(myVars['var']) && ((myVars['var']).slice(-1) == ";" && (myVars['var']).indexOf(':') == -1 ))
+			if(seperatorNotExist(myVars['var']))
 			{
 					result.push(myVars['var']);
 			}
-			else{
-					window.errorExist = true;
-					// return false;
-				}
+			else
+			{
+				hasError = true;
+			}
 		}
 		else
 		{
+			if($.isArray(myVars))
+			{
+				hasError = true;
+			}
 			str = '';
 		}
 	}
-	if(_string)
+
+
+	if(hasError)
 	{
-				// console.log(myVars['remain']);
-		result = result.join(', ');
+		window.errorExist['input'] = true;
+		// window.errorExist.push('input');
+		result = '#ERROR#';
 	}
+	else
+	{
+		delete window.errorExist.input;
+
+		if(_string)
+		{
+					// console.log(myVars['remain']);
+			result = result.join(', ');
+		}
+	}
+
 	return result;
 }
-// function detect_inputs(_text, _string)
-// {
-// 	var str    = _text;
-// 	var result = [];
-// 	for (_var i = 0; i < _var.length; i++)
-// 	{
 
-// 		var myVars = detector(str, ['_var', null ,':real;|:bool;|:string;']);
-
-// 		if(myVars['_var'])
-// 		{
-// 			str = myVars['remain'];
-
-// 			if(seperatorNotExist(myVars['_var']) )
-// 			{
-// 				if( var.length - 1.slice(-1) == ';')
-// 				{
-// 				console.log((myVars['remain']));
-// 				result.push(myVars['_var']);
-// 				}
-// 			}
-// 			else
-// 			{
-// 				window.errorExist = true;
-// 				// return false;
-
-// 			}
-// 		}
-// 	}
-// 		else
-// 		{
-// 			str = '';
-// 		}
-// 	}
-// 	if(_string)
-// 	{
-// 				// console.log(myVars['remain']);
-// 		result = result.join(', ');
-// 	}
-// 	return result;
-// }
 
 /**
  * [detect_module_output description]

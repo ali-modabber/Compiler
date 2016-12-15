@@ -27,6 +27,7 @@
   Hello World;
  </div>
 </div>
+ <div class="error">X</div>
  <script src="static/js/jquery-3.1.1.min.js"></script>
  <script src="static/js/ace/ace.js"></script>
  <script src="static/js/script.js"></script>
