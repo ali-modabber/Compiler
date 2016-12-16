@@ -156,14 +156,8 @@ function detect_module_content(_text)
 	var str       = _text;
 	var myContent = detector(str, [null, 'begin', 'end']);
 	var result    = myContent;
-	console.log(myContent);
-
-
+	// console.log(myContent);
 	result = detect_if(result);
-
-
-
-
 	// detect input name and return string of variable names
 	// var contentsNames = detect_content(myContent, true);
 	// return result
@@ -219,19 +213,13 @@ function detect_if(_text)
 		}
 		else
 		{
-			console.log('end.....');
+			// console.log('end');
 			str = '';
 		}
 
 
 	}
-
-
-
-	console.log(result);
-
-
-
+	// console.log(result);
 
 
 	if(hasError)
@@ -252,8 +240,4 @@ function detect_if(_text)
 	}
 
 	return result;
-
-
-
-
 }

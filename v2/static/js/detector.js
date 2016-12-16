@@ -70,3 +70,4 @@ function detector(_code)
 
 	return result;
 }
+// imported.src = '////script';

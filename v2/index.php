@@ -30,7 +30,9 @@
  <div class="error">X</div>
  <script src="static/js/jquery-3.1.1.min.js"></script>
  <script src="static/js/ace/ace.js"></script>
+ <script src="static/js/detector.js"></script>
  <script src="static/js/script.js"></script>
- <script src="static/js/function.js"></script>
+ <script src="static/js/module-functions.js"></script>
+ <script src="static/js/main.js"></script>
 </body>
 </html>
