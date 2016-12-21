@@ -156,7 +156,9 @@ function detect_module_content(_text)
 	var myContent = detector(str, [null, 'begin', 'end']);
 	var result    = myContent;
 	// console.log(myContent);
+	result = detect_while(result);
 	result = detect_if(result);
+
 	// detect input name and return string of variable names
 	// var contentsNames = detect_content(myContent, true);
 	// return result
@@ -256,10 +258,9 @@ function detect_while(_text)
 		var whileblockstart = detector(str, ['block','while', '{']);
 		var whileblockend   = detector(str, ['block','while', '}']);
 
-
 		// var whileelse    = detector(str, ['body','while', 'else']);
 
-		while(whilecond['cond'] && whileblockstart['block'] && whileblockend['block'])
+		if(whilecond['cond'] && whileblockstart['block'] && whileblockend['block'])
 		{
 			var whilebodyblock = detector(str, ['body','{', '}']);
 			// we have while with block of code
@@ -269,13 +270,13 @@ function detect_while(_text)
 			result.push(whilefinded);
 
 		}
-		else while(whilecond['cond'] && whiletotal['total'] && whilebody['body'])
+		else if(whilecond['cond'] && whiletotal['total'] && whilebody['body'])
 		{
 			// we have a new while
 			// remove string with new one without totalwhile
 			str = whiletotal['remain'];
 
-			while(seperatorNotExist(whilecond['cond']))
+			if(seperatorNotExist(whilecond['cond']))
 			{
 				// current while is true create text of while in js
 				var whilefinded = '\twhile ('+ whilecond.cond + ")\n\t{\n\t\t" + whilebody.body + ";\n\t}";
@@ -313,6 +314,5 @@ function detect_while(_text)
 		// 	result = result.join(', ');
 		// }
 	}
-
 	return result;
 }
