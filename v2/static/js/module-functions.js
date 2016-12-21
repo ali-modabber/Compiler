@@ -78,7 +78,6 @@ function detect_inputs(_text, _string)
 		}
 	}
 
-
 	if(hasError)
 	{
 		window.errorExist['input'] = true;
@@ -158,7 +157,6 @@ function detect_module_content(_text)
 	var result    = myContent;
 	// console.log(myContent);
 	result = detect_if(result);
-	result = detect_while(result);
 	// detect input name and return string of variable names
 	// var contentsNames = detect_content(myContent, true);
 	// return result
@@ -175,35 +173,35 @@ function detect_if(_text)
 
 	while(str)
 	{
-		var whiletotal      = detector(str, ['total','while', ';']);
-		var whilecond       = detector(str, ['cond','while', 'then']);
-		var whilebody       = detector(str, ['body','then', ';']);
+		var iftotal      = detector(str, ['total','if', ';']);
+		var ifcond       = detector(str, ['cond','if', 'then']);
+		var ifbody       = detector(str, ['body','then', ';']);
 
-		var whileblockstart = detector(str, ['block','while', '{']);
-		var whileblockend   = detector(str, ['block','while', '}']);
+		var ifblockstart = detector(str, ['block','if', '{']);
+		var ifblockend   = detector(str, ['block','if', '}']);
 
 
-		// var whileelse    = detector(str, ['body','while', 'else']);
+		// var ifelse    = detector(str, ['body','if', 'else']);
 
-		while(whilecond['cond'] && whileblockstart['block'] && whileblockend['block'])
+		if(ifcond['cond'] && ifblockstart['block'] && ifblockend['block'])
 		{
-			var whilebodyblock = detector(str, ['body','{', '}']);
-			// we have while with block of code
-			str = whileblockend['remain'];
+			var ifbodyblock = detector(str, ['body','{', '}']);
+			// we have if with block of code
+			str = ifblockend['remain'];
 
-			var whilefinded = '\twhile ('+ whilecond.cond + ")\n\t{\n\t\t" + whilebodyblock.body + "\n\t}";
-			result.push(whilefinded);
+			var iffinded = '\tif ('+ ifcond.cond + ")\n\t{\n\t\t" + ifbodyblock.body + "\n\t}";
+			result.push(iffinded);
 
 		}
-		else while(whilecond['cond'] && whiletotal['total'] && whilebody['body'])
+		else if(ifcond['cond'] && iftotal['total'] && ifbody['body'])
 		{
-			// we have a new while
-			// remove string with new one without totalwhile
-			str = whiletotal['remain'];
+			// we have a new if
+			// remove string with new one without totalif
+			str = iftotal['remain'];
 
-			while(seperatorNotExist(whilecond['cond']))
+			if(seperatorNotExist(ifcond['cond']))
 			{
-				// current while is true create text of if in js
+				// current if is true create text of if in js
 				var iffinded = '\tif ('+ ifcond.cond + ")\n\t{\n\t\t" + ifbody.body + ";\n\t}";
 				result.push(iffinded);
 			}
@@ -243,78 +241,78 @@ function detect_if(_text)
 	return result;
 }
 
-// function detect_while(_text)
-// {
-// 	var str          = _text;
-// 	var result       = [];
-// 	var hasError     = false;
+function detect_while(_text)
+{
+	var str          = _text;
+	var result       = [];
+	var hasError     = false;
 
-// 	while(str)
-// 	{
-// 		var iftotal      = detector(str, ['total','if', ';']);
-// 		var ifcond       = detector(str, ['cond','if', 'then']);
-// 		var ifbody       = detector(str, ['body','then', ';']);
+	while(str)
+	{
+		var whiletotal      = detector(str, ['total','while', ';']);
+		var whilecond       = detector(str, ['cond','while', 'then']);
+		var whilebody       = detector(str, ['body','then', ';']);
 
-// 		var ifblockstart = detector(str, ['block','if', '{']);
-// 		var ifblockend   = detector(str, ['block','if', '}']);
-
-
-// 		// var ifelse    = detector(str, ['body','if', 'else']);
-
-// 		if(ifcond['cond'] && ifblockstart['block'] && ifblockend['block'])
-// 		{
-// 			var ifbodyblock = detector(str, ['body','{', '}']);
-// 			// we have if with block of code
-// 			str = ifblockend['remain'];
-
-// 			var iffinded = '\tif ('+ ifcond.cond + ")\n\t{\n\t\t" + ifbodyblock.body + "\n\t}";
-// 			result.push(iffinded);
-
-// 		}
-// 		else if(ifcond['cond'] && iftotal['total'] && ifbody['body'])
-// 		{
-// 			// we have a new if
-// 			// remove string with new one without totalif
-// 			str = iftotal['remain'];
-
-// 			if(seperatorNotExist(ifcond['cond']))
-// 			{
-// 				// current if is true create text of if in js
-// 				var iffinded = '\tif ('+ ifcond.cond + ")\n\t{\n\t\t" + ifbody.body + ";\n\t}";
-// 				result.push(iffinded);
-// 			}
-// 			else
-// 			{
-// 				hasError = true;
-// 			}
-// 		}
-// 		else
-// 		{
-// 			// console.log('end');
-// 			str = '';
-// 		}
+		var whileblockstart = detector(str, ['block','while', '{']);
+		var whileblockend   = detector(str, ['block','while', '}']);
 
 
-// 	}
-// 	// console.log(result);
+		// var whileelse    = detector(str, ['body','while', 'else']);
+
+		while(whilecond['cond'] && whileblockstart['block'] && whileblockend['block'])
+		{
+			var whilebodyblock = detector(str, ['body','{', '}']);
+			// we have while with block of code
+			str = whileblockend['remain'];
+
+			var whilefinded = '\twhile ('+ whilecond.cond + ")\n\t{\n\t\t" + whilebodyblock.body + "\n\t}";
+			result.push(whilefinded);
+
+		}
+		else while(whilecond['cond'] && whiletotal['total'] && whilebody['body'])
+		{
+			// we have a new while
+			// remove string with new one without totalwhile
+			str = whiletotal['remain'];
+
+			while(seperatorNotExist(whilecond['cond']))
+			{
+				// current while is true create text of while in js
+				var whilefinded = '\twhile ('+ whilecond.cond + ")\n\t{\n\t\t" + whilebody.body + ";\n\t}";
+				result.push(whilefinded);
+			}
+			else
+			{
+				hasError = true;
+			}
+		}
+		else
+		{
+			// console.log('end');
+			str = '';
+		}
 
 
-// 	if(hasError)
-// 	{
-// 		window.errorExist['if'] = true;
-// 		// window.errorExist.push('input');
-// 		result = '#ERROR#';
-// 	}
-// 	else
-// 	{
-// 		delete window.errorExist.input;
+	}
+	// console.log(result);
 
-// 		// if(_string)
-// 		// {
-// 		// 			// console.log(myVars['remain']);
-// 		// 	result = result.join(', ');
-// 		// }
-// 	}
 
-// 	return result;
-// }
+	if(hasError)
+	{
+		window.errorExist['while'] = true;
+		// window.errorExist.push('input');
+		result = '#ERROR#';
+	}
+	else
+	{
+		delete window.errorExist.input;
+
+		// if(_string)
+		// {
+		// 			// console.log(myVars['remain']);
+		// 	result = result.join(', ');
+		// }
+	}
+
+	return result;
+}
