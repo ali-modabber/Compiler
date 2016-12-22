@@ -156,9 +156,10 @@ function detect_module_content(_text)
 	var myContent = detector(str, [null, 'begin', 'end']);
 	var result    = myContent;
 	// console.log(myContent);
-	result = detect_while(result);
+	// result = detect_while(result);
 	result = detect_if(result);
-
+	// detect_block();
+	//
 	// detect input name and return string of variable names
 	// var contentsNames = detect_content(myContent, true);
 	// return result
@@ -182,30 +183,30 @@ function detect_if(_text)
 		var ifblockstart = detector(str, ['block','if', '{']);
 		var ifblockend   = detector(str, ['block','if', '}']);
 
-
 		// var ifelse    = detector(str, ['body','if', 'else']);
-
 		if(ifcond['cond'] && ifblockstart['block'] && ifblockend['block'])
 		{
 			var ifbodyblock = detector(str, ['body','{', '}']);
+
 			// we have if with block of code
 			str = ifblockend['remain'];
-
 			var iffinded = '\tif ('+ ifcond.cond + ")\n\t{\n\t\t" + ifbodyblock.body + "\n\t}";
 			result.push(iffinded);
-
 		}
+			// console.log(str);
 		else if(ifcond['cond'] && iftotal['total'] && ifbody['body'])
 		{
 			// we have a new if
 			// remove string with new one without totalif
 			str = iftotal['remain'];
-
+			// console.log(iftotal['remain'])
 			if(seperatorNotExist(ifcond['cond']))
 			{
 				// current if is true create text of if in js
 				var iffinded = '\tif ('+ ifcond.cond + ")\n\t{\n\t\t" + ifbody.body + ";\n\t}";
 				result.push(iffinded);
+				console.log(result);
+				delete ;
 			}
 			else
 			{
@@ -218,10 +219,7 @@ function detect_if(_text)
 			str = '';
 		}
 
-
 	}
-	// console.log(result);
-
 
 	if(hasError)
 	{
@@ -239,7 +237,6 @@ function detect_if(_text)
 		// 	result = result.join(', ');
 		// }
 	}
-
 	return result;
 }
 
@@ -253,7 +250,7 @@ function detect_while(_text)
 	{
 		var whiletotal      = detector(str, ['total','while', ';']);
 		var whilecond       = detector(str, ['cond','while', 'then']);
-		var whilebody       = detector(str, ['body','then', ';']);
+			var whilebody       = detector(str, ['body','then', ';']);
 
 		var whileblockstart = detector(str, ['block','while', '{']);
 		var whileblockend   = detector(str, ['block','while', '}']);
