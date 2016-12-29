@@ -94,7 +94,6 @@ function detect_inputs(_text, _string)
 			result = result.join(', ');
 		}
 	}
-
 	return result;
 }
 
@@ -182,7 +181,7 @@ function detect_if(_text)
 
 		var ifblockstart = detector(str, ['block','if', '{']);
 		var ifblockend   = detector(str, ['block','if', '}']);
-
+		// var check 	 = false;
 		// var ifelse    = detector(str, ['body','if', 'else']);
 		if(ifcond['cond'] && ifblockstart['block'] && ifblockend['block'])
 		{
@@ -192,6 +191,7 @@ function detect_if(_text)
 			str = ifblockend['remain'];
 			var iffinded = '\tif ('+ ifcond.cond + ")\n\t{\n\t\t" + ifbodyblock.body + "\n\t}";
 			result.push(iffinded);
+			check = true;
 		}
 			// console.log(str);
 		else if(ifcond['cond'] && iftotal['total'] && ifbody['body'])
@@ -205,8 +205,11 @@ function detect_if(_text)
 				// current if is true create text of if in js
 				var iffinded = '\tif ('+ ifcond.cond + ")\n\t{\n\t\t" + ifbody.body + ";\n\t}";
 				result.push(iffinded);
-				console.log(result);
-				delete ;
+				// console.log(result);
+				// var rem = str.indexOf(result[iffinded]);
+				// var len = result.length;
+				// console.log(result[iffinded]);
+				check = true;
 			}
 			else
 			{
@@ -218,7 +221,12 @@ function detect_if(_text)
 			// console.log('end');
 			str = '';
 		}
+	}
+//get remain of code
 
+	if(check == true)
+	{
+		console.log("ffffffffff");
 	}
 
 	if(hasError)
@@ -250,7 +258,7 @@ function detect_while(_text)
 	{
 		var whiletotal      = detector(str, ['total','while', ';']);
 		var whilecond       = detector(str, ['cond','while', 'then']);
-			var whilebody       = detector(str, ['body','then', ';']);
+		var whilebody       = detector(str, ['body','then', ';']);
 
 		var whileblockstart = detector(str, ['block','while', '{']);
 		var whileblockend   = detector(str, ['block','while', '}']);
@@ -272,7 +280,6 @@ function detect_while(_text)
 			// we have a new while
 			// remove string with new one without totalwhile
 			str = whiletotal['remain'];
-
 			if(seperatorNotExist(whilecond['cond']))
 			{
 				// current while is true create text of while in js
@@ -289,12 +296,8 @@ function detect_while(_text)
 			// console.log('end');
 			str = '';
 		}
-
-
 	}
 	// console.log(result);
-
-
 	if(hasError)
 	{
 		window.errorExist['while'] = true;

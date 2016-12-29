@@ -31,7 +31,6 @@ function detector(_code)
 					return false;
 				}
 			});
-
 		}
 		// if we have end search argument
 		if(searchEndTxt)
